@@ -1,0 +1,130 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard Orang Tua</title>
+    {{!-- Script --}}
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-storage.js"></script>
+    <script src="./js/jquery.js"></script>
+    <script src="./css/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script type="module" src="./js/parent.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+    {{!-- end-script --}}
+    {{!-- stylesheet --}}
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet'>
+    {{!-- end-stylesheet --}}
+    <style>
+        .box{
+            border-radius: 18px !important;
+        }
+        @media(min-width:1280px){.container{
+            padding-right:0px !important;
+        }}
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <header class="nav">
+            <nav class="navbar navbar-dark navbar-expand fixed-top bg-purple w-100">
+                <div class="container-sm">
+                    <a class="navbar-brand" href="/">Kiddos</a>
+                    <div class="navbar-nav ml-auto text-center">
+                        <div class="dropdown mr-1">
+                            <a type="button" class="dropdown-toggle" id="dropdownMenuProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                                <img src="" class="rounded-circle image-profile" width="35px" height="35px" style="border:1px solid white">
+                            </a>
+                            <div class="dropdown-menu border-0 rounded" aria-labelledby="dropdownMenuProfile">
+                                <a class="dropdown-item mt-3 nama" href="/parent"></a>
+                                <hr>
+                                <a class="dropdown-item" href="/addChildren"><img src="./image/icon/_ionicons_svg_md-person-add.svg" class="justify-content-end icon-small mr-2">Tambahkan Anak</a>
+                                <a class="dropdown-item" href="/accountSettings"><img src="./image/icon/_ionicons_svg_md-settings.svg" class="justify-content-end icon-small mr-2">Pengaturan Profil</a>
+                                <a class="dropdown-item signout"><img src="./image/icon/_ionicons_svg_md-log-out.svg" class="justify-content-end icon-small mr-2">Keluar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- End-Navbar -->
+        <!-- Parent-Head -->
+        <div class="bg-dashboard"></div>
+        <div class="d-flex container top-box">
+            <aside class="col-xl-3 px-0 mt-3">
+                <!-- Profile -->
+                <box class="mx-3 profile-box bg-light d-block pt-5 pb-2 pb-xl-1 px-5">
+                    <div class="mx-auto text-center">
+                        <img src="" alt="" class="img-profile image-profile">
+                        <h4 class="text-dark mt-n5 fw-600 nama"></h4>
+                    </div>
+                    <ul class="mt-4 pl-0 text-left">
+                        <li class="row">
+                            <span class="col-1 text-right circle-photo"><img src="./image/icon/_ionicons_svg_md-person-add.svg" class="justify-content-end icon-small"></span>
+                            <p class="pl-3"><a href="/addChildren" class="card-link text-dark">Tambahkan Anak</a></p>
+                        </li>
+                        <li class="row">
+                            <span class="col-1 text-right"><img src="./image/icon/_ionicons_svg_md-settings.svg" class="justify-content-end icon-small"></span>
+                            <p class="pl-3"><a href="/accountSettings" class="card-link text-dark">Pengaturan</a></p>
+                        </li>
+                        <li class="row">
+                            <span class="col-1 text-right"><img src="./image/icon/_ionicons_svg_md-log-out.svg" class="justify-content-end icon-small"></span>
+                            <p class="pl-3"><a class="signout" class="card-link">Keluar</a></p>
+                        </li>
+                    </ul>
+                </box>
+                <!-- End-menu -->
+            </aside>
+            <!-- content-box -->
+            <aside class="col-xl-9 mt-4 carousel slide pl-xl-0 bg-light box py-0 mb-3" id="carouselExampleControls">
+                <!-- Top-content-box -->
+                <div class="carousel-inner">
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon mt-1" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon mt-1" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                <!-- end-top-content-box -->
+            </aside>
+            <!-- End-content-box -->
+        </div>
+        <!-- End-Parent-Head -->
+        <!-- Bottom-content-box -->
+        <div class="container">
+            <div class="detailPenggunaan container"></div>
+            <div class="lokasi container"></div>
+            <div class="video container"></div>
+            <div class="settings container"></div>
+        </div>
+        <!-- end-Bottom-content-box -->
+    </div>
+    <!-- Script -->
+    <script>$(".carousel-control-next,.carousel-control-prev")
+        .click(() => {
+            const anakKe=$('.carousel-item.active').attr('id');
+            $('detail-app')
+                .remove();
+            $('lokasi-app')
+                .remove();
+            $('video-app')
+                .remove();
+            $(`#detail${anakKe.substr(9,)} ion-icon`)
+                .removeClass('menu-active');
+            $(`#location${anakKe.substr(9,)} ion-icon`)
+                .removeClass('menu-active');
+            $(`#video${anakKe.substr(9,)} ion-icon`)
+                .removeClass('menu-active');
+           
+        });</script>
+    <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+</body>
+
+</html>

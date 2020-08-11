@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Masuk Kiddos</title>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-storage.js"></script>
+    <style>
+        table tr, table tr:nth-child(odd), table tr :nth-child(even){
+            border: none;
+            background: none !important;
+        }
+        .changePhoto {
+            border-radius: 50%;
+            background-color: white;
+            font-size: 1.5rem;
+            padding: 4px;
+            position: relative;
+            top: -2rem;
+        }
+        .btn-dark{
+            font-family: 'Roboto',sans-serif !important;
+            font-size: 0.95rem !important;
+            width:7rem;
+        }
+        input[type="text"]:disabled, input[type="password"]:disabled{
+            border: 0;
+            text-align: right;
+        }
+        input[type="text"], input[type="password"]{
+            border-bottom: 1px;
+        }
+        input[type="text"]:focus, input[type="password"]:focus{
+            border-bottom: 2px;
+        }
+    </style>
+</head>
+<body background="./image/bg-1.png">
+    <header class="nav">
+        <nav class="navbar navbar-dark navbar-expand fixed-top bg-purple w-100">
+            <div class="container-sm">
+                <a class="navbar-brand" href="/">Kiddos</a>
+
+                <div class="navbar-nav ml-auto text-center">
+                    {{!-- <a class="nav-item text-decoration-none d-inline-block  mx-3 text-white border-0" href="#feature">
+                        <ion-icon name="notifications" class="nav-img"></ion-icon>
+                    </a>
+                    <a class="nav-item text-decoration-none d-inline-block  mx-3 text-white border-0" href="#">
+                        <ion-icon name="person-add" class="nav-img"></ion-icon>
+                    </a> --}}
+                    <div class="dropdown mr-1">
+                        <a type="button" class="dropdown-toggle" id="dropdownMenuProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                            <img src="./image/social.svg" class="rounded-circle image-profile" width="35px" height="35px" style="border:1px solid white">
+                        </a>
+                        <div class="dropdown-menu border-0 rounded" aria-labelledby="dropdownMenuProfile">
+                                <a class="dropdown-item mt-3 nama" href="/parent"></a><hr>
+                            <a class="dropdown-item" href="/addChildren"><img src="./image/icon/_ionicons_svg_md-person-add.svg" class="justify-content-end icon-small mr-2">Tambahkan Anak</a>
+                            <a class="dropdown-item" href="/accountSettings"><img src="./image/icon/_ionicons_svg_md-settings.svg" class="justify-content-end icon-small mr-2">Pengaturan Profil</a>
+                            <a class="dropdown-item signout"><img src="./image/icon/_ionicons_svg_md-log-out.svg" class="justify-content-end icon-small mr-2">Keluar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container h-full d-flex align-items-center">
+        <div class="p-5 bg-white box pb-3 h-75">
+            <h3><strong>Pengaturan Akun</strong></h3>
+            <div class="d-flex mt-5 px-5">
+                <aside>
+                    <img src="" class="image-profile rounded-circle" width="110px" height="110px">
+                    <a id="changePhoto"><ion-icon name="camera-reverse" class="changePhoto"></ion-icon></a>
+                    <input type="file" id="choosePhoto" style="display: none;" />
+                </aside>
+                <aside class="px-5 w-100">
+                    <form class="mb-3" id="updateName">
+                        <h4 class="pl-5"><strong>Pengaturan Umum</strong></h4>
+                        <table style="margin-left:5rem;">
+                            <tbody>
+                                <tr class="text-left">
+                                    <td width="240px"><label for="nama-user">Nama</label></td>
+                                    <td width="240px" class="text-left pr-3"><input type="text" name="nama-user" value="" disabled required pattern="[a-zA-Z0-9 ]+"></td>
+                                    <td width="50px">
+                                        <a id="editNama"><ion-icon name="create-outline" size="medium"></ion-icon></a>
+                                    </td>
+                                    <td><input type="submit" class="button btn btn-dark rounded-pill" value="Simpan" name="btn-save-change-name" disabled></td>
+                                    <td><input type="reset" class="button btn btn-dark rounded-pill" value="Batal" name="btn-cancel-change-name" disabled></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <form id="updateSecurity">
+                        <h4 class="pl-5"><strong>Pengaturan Keamanan</strong></h4>
+                        <table style="margin-left:5rem;">
+                            <tbody>
+                                <tr class="text-left">
+                                    <td width="240px"><label for="password">Kata sandi lama</label></td>
+                                    <td width="240px" class="text-left pr-3"><input type="password" name="password" value="************" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" title="Kata sandi harus mengandung huruf besar, huruf kecil dan angka dengan minimal panjang 8 karakter" disabled required></td>
+                                    <td width="50px">
+                                        <a id="editPassword"><ion-icon name="create-outline" size="medium"></ion-icon></a>
+                                    </td>
+                                    <td><input type="submit" class="button btn btn-dark rounded-pill" value="Simpan" name="btn-save-change-password" disabled></td>
+                                    <td><input type="reset" class="button btn btn-dark rounded-pill" value="Batal" name="btn-cancel-change-password" disabled></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td width="240px"><label for="new-password">Kata sandi baru</label></td>
+                                    <td width="240px" class="text-left pr-3"><input type="password" name="new-password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" title="Kata sandi harus mengandung huruf besar, huruf kecil dan angka dengan minimal panjang 8 karakter" disabled required></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td width="240px"><label for="re-new-password">Konfirmasi Kata sandi</label></td>
+                                    <td width="240px" class="text-left pr-3"><input type="password" name="re-new-password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" title="Kata sandi harus mengandung huruf besar, huruf kecil dan angka dengan minimal panjang 8 karakter" disabled required></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </aside>
+            </div>
+        </div>
+    </div>
+    <script src="./js/jquery.js"></script>
+    <script src="./js/accountSettings.js"></script>
+    <script src="./css/bootstrap-4.4.1-dist/js/bootstrap.min.js" defer></script>
+    <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+</body>
+</html>

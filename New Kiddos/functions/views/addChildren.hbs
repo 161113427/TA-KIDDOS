@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Verifikasi Email</title>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+   
+    <style>
+        body {
+            background: url('./image/bg-1.png') no-repeat;
+        }
+        
+        .verif-box {
+            max-width: 40rem;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body class="h-full">
+     <header class="nav">
+        <nav class="navbar navbar-dark navbar-expand fixed-top bg-purple w-100">
+            <div class="container-sm">
+                <a class="navbar-brand" href="/">Kiddos</a>
+
+                <div class="navbar-nav ml-auto text-center">
+                    <div class="dropdown mr-1">
+                        <a type="button" class="dropdown-toggle" id="dropdownMenuProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                            <img src="" class="rounded-circle image-profile" width="35px" height="35px" style="border:1px solid white">
+                        </a>
+                        <div class="dropdown-menu border-0 rounded" aria-labelledby="dropdownMenuProfile">
+                            <a class="dropdown-item mt-3 nama" href="/parent"></a>
+                            <hr>
+                            <a class="dropdown-item" href="/addChildren"><img src="./image/icon/_ionicons_svg_md-person-add.svg" class="justify-content-end icon-small mr-2">Tambahkan Anak</a>
+                            <a class="dropdown-item" href="/accountSettings"><img src="./image/icon/_ionicons_svg_md-settings.svg" class="justify-content-end icon-small mr-2">Pengaturan Profil</a>
+                            <a class="dropdown-item signout"><img src="./image/icon/_ionicons_svg_md-log-out.svg" class="justify-content-end icon-small mr-2">Keluar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="d-flex justify-content-center align-items-center h-full">
+        <div class="p-5 text-center bg-white box">
+            <form id="kirimVerifikasi">
+                <h3><strong>Tambahkan Anak</strong></h3>
+                <div class="py-lg-4 px-lg-5 verif-box text-center">
+                    <p>Masukkan alamat email anak yang ingin dipantau</p>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="email-anak" required="" value=""></input>
+                        <label for="email-anak" class="col-form-label text-dark">Email</label>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <input type="submit" value="Kirim" class="btn button btn-primary mt-3 px-5">
+                        <a href="/parent"><input type="button" value="Batal" class="btn button btn-link mt-3 text-decoration-none"></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="./js/jquery.js"></script>
+    <script>$('input').change((e)=>{
+        if($('input').val()!=''){
+            $('input').focus(()=>{
+                $("label").css({'top': '-28px','left': '0','font-size': '12px','transition': '0.2s'});
+            })
+            $("label").css({'top': '-28px','left': '0','font-size': '12px','transition': '0.2s'});
+        }
+        else{ 
+            $("label").css({'top': '0px','left': '14px','font-size': '14px','transition': '0.2s','margin-left': '8px','line-height': '14px'});
+        }
+        e.preventDefault();
+        })</script>
+    <script src="./js/addChildren.js" type="module"></script>
+    <script src="./css/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

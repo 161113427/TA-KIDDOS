@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Daftar Kiddos</title>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+</head>
+
+<body class="h-full">
+    <!-- Navbar -->
+    <div class="nav">
+        <nav class="navbar navbar-expand-lg navbar-dark m-auto w-100">
+            <div class="container">
+                <a class="navbar-brand text-dark" href="/">Kiddos</a>
+            </div>
+        </nav>
+    </div>
+    <!-- End-Navbar -->
+    <!-- Body-content -->
+    <div class="container d-flex h-70 mb-5">
+        <aside class="mt-5 register-side col-xl-7 col-lg-6">
+            <h1 class="display-1">KIDDOS</h1>
+            <h1 class="display-light">Smartphone Parental Control</h1>
+            <h1 class="display-5 mt-5">Awasi Penggunaan Smartphone Anak</h1>
+        </aside>
+        <div class="col-xl-5 col-lg-6 box my-auto mb-5">
+            <div class="w-100 text-center">
+                <h2>Daftar Sekarang</h2>
+            </div>
+            <form class="w-75 mx-auto" id="register">
+                <div class="form-group">
+                    <input type="text" class="form-control border-dark text-dark" id="user-name" required pattern="[a-zA-Z0-9 ]+" value=""/>
+                    <label for="user-name" class="col-form-label">Nama</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control border-dark text-dark" id="user-email" required pattern="[A-Za-z0-9\._]+@[a-z]+\.[a-z\.].{1,6}" title="Alamat email tidak sesuai" value=""></input>
+                    <label for="user-email" class="col-form-label">Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control border-dark text-dark" id="user-password" required pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"title="Kata sandi harus mengandung huruf besar, huruf kecil dan angka dengan minimal panjang 8 karakter" value="" />
+                    <label for="user-password" class="col-form-label">Kata Sandi</label>
+                    <p style="font-size:0.75rem">Kata sandi harus mengandung huruf besar, huruf kecil dan angka dengan minimal panjang 8 karakter </p>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control border-dark text-dark" id="user-re-password" required value=""></input>
+                    <label for="user-re-password" class="col-form-label">Ulang Kata Sandi</label>
+                </div>
+                <div class="form-group">
+                    <div class="form-check form-check-inline w-50">
+                        <input class="form-check-input" type="radio" name="statusRadio" id="user-status-parent" value="orangtua">
+                        <label class="form-check-label" for="user-status-parent">Orang Tua</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="statusRadio" id="user-status-child" value="anak">
+                        <label class="form-check-label" for="user-status-child">Anak</label>
+                    </div>
+                </div>
+
+                <div class="form-check text-left">
+                    <p class="text-dark"><input type="checkbox" name="agreement" required></input>&nbsp;Saya menyetujui kebijakan pengguna Kiddos</p>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <input class="btn btn-primary w-100 rounded-pill" type="submit" value="Buat Akun" id="regis"></input>
+                </div>
+            </form>
+            <div class="mx-auto w-100 text-center">
+                <p class="d-sm-inline-block">Sudah Punya Akun?<a href="/login" class="d-inline-block card-link">&nbsp;Masuk</a></p>
+            </div>
+        </div>
+    </div>
+    <!-- End Body-content -->
+    <script src="./js/jquery.js"></script>
+    <script src="./css/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+    <script type="module" src="./js/register.js "></script>
+</body>
+
+</html>
