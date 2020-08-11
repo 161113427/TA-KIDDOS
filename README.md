@@ -14,4 +14,4 @@ Langkah-langkah Penggunaan secara lokal:
 8. Untuk menjalankan aplikasi secara lokal, kembali ke path "New Kiddos", jalankan perintah "firebase serve --only hosting,functions"(tanpa tanda kutip)
 9. Buka browser ketikkan http://localhost:5000
 
-Akses dengan menggunakan hosting, dapat diakses melalui: https://kiddos-724ae.web.app/
+Akses dengan menggunakan hosting, dapat diakses melalui: https://kiddos-app-c0029.firebaseapp.com/
