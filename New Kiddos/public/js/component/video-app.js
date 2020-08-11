@@ -92,7 +92,7 @@ class VideoApp extends HTMLElement {
                                                 .collection('Video Processing')
                                                 .doc('processedVideo')
                                                 .onSnapshot(snap => {
-                                                    const processedURL = snap.data()[`${this._data.uid}_${element.nama}`];
+                                                    const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
                                                     if (processedURL)
                                                         return $(`#${nama}`)
                                                             .attr('src', processedURL);
@@ -102,14 +102,16 @@ class VideoApp extends HTMLElement {
                                                     if ($(`#${nama}`)
                                                         .attr('src') == '#') {
                                                         const uploadLink = element.path;
-                                                        const key = `${this._data.uid}_${element.nama}`.toString();
+                                                        const key = `${this._data.uid}_${element.nama.split(':')
+                                                        .join('')}`.toString();
                                                         const data = {
                                                             requestedID: key,
                                                             requestedURL: uploadLink
                                                         };
                                                         $(`#${nama}`)
                                                             .attr('src', 'sedangProses');
-                                                        fetch(`/parent/video/${this._data.uid}_${element.nama}`, { method: "POST", headers: { Accept: 'application/json', "Content-Type": "application/json" }, body: JSON.stringify(data) })
+                                                        fetch(`/parent/video/${this._data.uid}_${element.nama.split(':')
+                                                        .join('')}`, { method: "POST", headers: { Accept: 'application/json', "Content-Type": "application/json" }, body: JSON.stringify(data) })
                                                             .then(res => {
                                                                 return res.json();
                                                             })
@@ -125,7 +127,7 @@ class VideoApp extends HTMLElement {
                                                                     .collection('Video Processing')
                                                                     .doc('processedVideo')
                                                                     .onSnapshot(snap => {
-                                                                        const processedURL = snap.data()[`${this._data.uid}_${element.nama}`];
+                                                                        const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
                                                                         if (processedURL)
                                                                             return $(`#${nama}`)
                                                                                 .attr('src', processedURL);
