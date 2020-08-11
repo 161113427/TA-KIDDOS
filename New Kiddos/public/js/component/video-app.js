@@ -128,9 +128,10 @@ class VideoApp extends HTMLElement {
                                                                     .doc('processedVideo')
                                                                     .onSnapshot(snap => {
                                                                         const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
-                                                                        if (processedURL)
+                                                                        if (processedURL) {
                                                                             return $(`#${nama}`)
                                                                                 .attr('src', processedURL);
+                                                                        }
                                                                     })
                                                             }
                                                         }, 1000)
