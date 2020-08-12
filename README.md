@@ -4,7 +4,7 @@ Source Code App Kiddos
 Langkah-langkah Penggunaan secara lokal:
 1. Download direktori "New Kiddos" dari repository ini, setelah selesai terdownload silakan ekstrak file
 2. Buka terminal/cmd dengan path ke direktori "New Kiddos" (contoh: "C:\Users\Download\New Kiddos")
-3. Jalankan perintah untuk menginstall firebase tools, yaitu "npm i -g firebase-tools"(tanpa tanda kutip)
+3. Jalankan perintah untuk menginstall firebase tools (jika belum pernah menginstall sebelumnya), yaitu "npm i -g firebase-tools"(tanpa tanda kutip)
 4. Lakukan login dengan akun firebase. Untuk login menggunakan terminal/cmd ketikkan perintah "firebase login"(tanpa tanda kutip)
 5. Masuk dengan akun sbb :
 	- email = sesuai dengan yang akan dikirim oleh tim
