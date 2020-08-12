@@ -467,9 +467,4 @@ exports.encryptFile = functions.storage.object()
             return console.log('file sudah ada');
         }
     });
-
-<<<<<<< HEAD
 exports.app = functions.https.onRequest(app);
-=======
-exports.app = functions.https.onRequest(app);
->>>>>>> 9439a909bfab47ceaf8f1ff653861a0675c3125b
