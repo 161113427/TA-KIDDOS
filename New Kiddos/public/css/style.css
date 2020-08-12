@@ -224,6 +224,10 @@ button.close {
     right: 30px;
 }
 
+.navbar-expand .navbar-nav .dropdown-menu {
+    left: -8rem !important;
+}
+
 .modal-dialog {
     position: relative;
     top: 15%;
