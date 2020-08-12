@@ -340,9 +340,13 @@ auth.onAuthStateChanged((user) => {
                     //Get name by displayName authentication
                     $(".nama")
                         .text(user.displayName);
-                    user.photoURL != '' ? $('.image-profile')
-                        .attr('src', user.photoURL) : $('.image-profile')
-                        .attr('src', '../image/social.svg');
+                    if (user.photoURL != null) {
+                        $('.image-profile')
+                            .attr('src', user.photoURL)
+                    } else {
+                        $('.image-profile')
+                            .attr('src', '../image/social.svg');
+                    }
                     try {
                         //Get name by firestore database
                         // dataOrangTua

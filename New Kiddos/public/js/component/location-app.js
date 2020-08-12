@@ -17,7 +17,7 @@ class LocationApp extends HTMLElement {
             })
             .then(responseJson => {
                 return new Promise((resolve, reject) => {
-                    responseJson.features[0].place_name !== undefined || responseJson.features[0].place_name !== "" ? resolve(responseJson.features[0].place_name) : 0;
+                    responseJson.features.length != 0 ? resolve(responseJson) : resolve(undefined);
                 })
 
             })
@@ -33,12 +33,12 @@ class LocationApp extends HTMLElement {
         });
         this.pos(this._data.lng, this._data.lat)
             .then((result) => {
-                if (result !== undefined) {
+                if (result !== undefined && result.features[0].place_name !== "") {
                     //Put Marker here
                     const marker = new mapboxgl.Marker()
                         .setLngLat([this._data.lng, this._data.lat])
                         .setPopup(new mapboxgl.Popup({ offset: 25 })
-                            .setHTML(`<h5><strong>Lokasi ${this._data.namaAnak}</strong></h5><p>Saat ini ${this._data.namaAnak} sedang berada di ${result}</p>`))
+                            .setHTML(`<h5><strong>Lokasi ${this._data.namaAnak}</strong></h5><p>Saat ini ${this._data.namaAnak} sedang berada di ${result.features[0].place_name}</p>`))
                         .addTo(map);
                 } else {
                     const marker = new mapboxgl.Marker()
@@ -77,7 +77,7 @@ class LocationApp extends HTMLElement {
                         .getFullYear()
                         .toString()
                         .slice(2, 4);
-                    if (result !== undefined) {
+                    if (result !== undefined && result.features[0].place_name != "") {
                         //Put Marker here
                         $(`#${data.id}-content`)
                             .append(`<style>
@@ -101,7 +101,7 @@ class LocationApp extends HTMLElement {
                             <div class="position text-left mt-5">
                                 <h5 class="mb-3"><strong>${this._data.namaAnak}</strong></h5>
                                 <div class="d-flex mb-3">
-                                    <p><span><ion-icon name="location-sharp" style="color:red;"></ion-icon></span> Alamat lokasi : <strong>${result}</strong></p>
+                                    <p><span><ion-icon name="location-sharp" style="color:red;"></ion-icon></span> Alamat lokasi : <strong>${result.features[0].place_name}</strong></p>
                                 </div>
                                 <div class="update-time mt-4 py-2 shadow"> Dimutakhirkan ${tanggal}/${bulan}/${tahun}, ${jam} : ${menit} </div>
                             </div>`, map)
@@ -113,12 +113,24 @@ class LocationApp extends HTMLElement {
                                 font-size:18sp;
                                 
                             }
+                            .update-time{
+                                position:fixed;
+                                border-radius:14px;
+                                z-index:1;
+                                font-size:0.85rem;
+                                font-family:'Roboto';
+                                background:white;
+                                width:14rem;
+                                font-weight:600;
+                                text-align:center;
+                            }
                             </style>
                             <div class="position text-left mt-5">
                                 <h5 class="mb-3"><strong>${this._data.namaAnak}</strong></h5>
                                 <div class="d-flex mb-3">
                                     <p><span><ion-icon name="location-sharp" style="color:red;"></ion-icon></span> Alamat lokasi : <strong>Alamat lokasi anak belum tersedia</strong></p>
                                 </div>
+                                <div class="update-time mt-4 py-2 shadow"> Dimutakhirkan ${tanggal}/${bulan}/${tahun}, ${jam} : ${menit} </div>
                             </div>`, map)
                     }
                 });

@@ -7,9 +7,13 @@ $(document)
             if (user) {
                 $(".nama")
                     .text(user.displayName);
-                user.photoURL != '' ? $('.image-profile')
-                    .attr('src', user.photoURL) : $('.image-profile')
-                    .attr('src', '../image/social.svg');
+                if (user.photoURL != null) {
+                    $('.image-profile')
+                        .attr('src', user.photoURL)
+                } else {
+                    $('.image-profile')
+                        .attr('src', '../image/social.svg');
+                }
                 if (user.emailVerified) {
                     $('#kirimVerifikasi')
                         .submit((e) => {

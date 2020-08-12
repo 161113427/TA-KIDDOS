@@ -10,6 +10,7 @@ const fs = require('fs');
 const { Buffer } = require('buffer');
 const cors = require('cors');
 const initializeApp = require('./initializeApp.js');
+const converter = require('video-converter');
 initializeApp.initializeApp;
 
 const app = express();
@@ -55,9 +56,9 @@ app.post('/parent/video/:id', async(req, res) => {
             .download({
                 destination: tempFilePath
             })
-        console.log('File Downloaded');
     }
 
+    fs.mkdir(path.join(os.tmpdir(), nameApp), () => {});
     let encryptedFile = [];
     for (let i = 0; i < Math.pow(2, 2); i++) {
         const tempFilePath = path.join(os.tmpdir(), 'encrypted_' + nameApp + "_" + i + '.bin');
@@ -467,4 +468,5 @@ exports.encryptFile = functions.storage.object()
             return console.log('file sudah ada');
         }
     });
+
 exports.app = functions.https.onRequest(app);
