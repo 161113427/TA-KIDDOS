@@ -14,6 +14,7 @@
     <script src="./css/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <script type="module" src="./js/parent.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+
     {{!-- end-script --}}
     {{!-- stylesheet --}}
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet'>
@@ -37,7 +38,7 @@
                     <div class="navbar-nav ml-auto text-center">
                         <div class="dropdown mr-1">
                             <a type="button" class="dropdown-toggle" id="dropdownMenuProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
-                                <img src="./image/social.svg" class="rounded-circle image-profile" width="35px" height="35px" style="border:1px solid white">
+                                <img src="" class="rounded-circle image-profile bg-white" width="35px" height="35px" style="border:1px solid white">
                             </a>
                             <div class="dropdown-menu border-0 rounded" aria-labelledby="dropdownMenuProfile">
                                 <a class="dropdown-item mt-3 nama" href="/parent"></a>
@@ -59,7 +60,7 @@
                 <!-- Profile -->
                 <box class="mx-3 profile-box bg-light d-block pt-5 pb-2 pb-xl-1 px-5">
                     <div class="mx-auto text-center">
-                        <img src="./image/social.svg" alt="" class="img-profile image-profile">
+                        <img src="" class="img-profile image-profile bg-white">
                         <h4 class="text-dark mt-n5 fw-600 nama"></h4>
                     </div>
                     <ul class="mt-4 pl-0 text-left">
@@ -80,9 +81,9 @@
                 <!-- End-menu -->
             </aside>
             <!-- content-box -->
-            <aside class="col-xl-9 mt-4 carousel slide pl-xl-0 bg-light box py-0 mb-3" id="carouselExampleControls">
+            <aside class="col-xl-9 mt-4 carousel slide pl-xl-0 bg-light box py-0 mb-3 d-flex justify-content-center align-items-center" id="carouselExampleControls">
                 <!-- Top-content-box -->
-                <div class="carousel-inner">
+                <div class="carousel-inner hide">
                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon mt-1" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>

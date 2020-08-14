@@ -36,7 +36,7 @@ const createTopBox = (index) => {
             </div>
         </div>
     </div>
-    <div class="main-info d-flex mb-n4">    
+    <div class="main-info d-flex mb-lg-n3">    
         <div class="py-4 text-dark col-xl-5 text-left pl-4">
             <h6 class="fw-600 left-list pl-3">Dimutakhirkan Pada</h6>
             <p class="ml-3" id="lastUpdate${index}"></p>
@@ -89,7 +89,7 @@ const riwayatAplikasi = (user, anak, index) => {
     user.doc(anak)
         .collection("Riwayat Akses Aplikasi")
         .orderBy("waktuAkses", "desc")
-        .limit(20)
+        .limit(30)
         .onSnapshot((snap) => {
             try {
                 snap.forEach((riwayatAkses) => {
@@ -186,7 +186,7 @@ const renderDataAnak = (user, anak, index, uid) => {
                     $(`#lastUpdate${index}`)
                     .text(`Belum ada data untuk ditampilkan`) :
                     $(`#lastUpdate${index}`)
-                    .text(`${tglUpdate}/${blnUpdate}/${thnUpdate}, Pukul ${jamUpdate}:${menitUpdate}`);
+                    .text(`${tglUpdate}/${blnUpdate+1}/${thnUpdate}, Pukul ${jamUpdate}:${menitUpdate}`);
             } catch {}
             try {
                 $(`#appPalingLamaDiakses${index}`)
@@ -220,7 +220,8 @@ const renderDataAnak = (user, anak, index, uid) => {
                     detailPenggunaanAplikasi
                         .then(data => {
                             detailApp.detailAplikasi = data;
-                        });
+                        })
+
                     $('.detailPenggunaan')
                         .html(detailApp);
                     $('location-app')
@@ -244,7 +245,7 @@ const renderDataAnak = (user, anak, index, uid) => {
                     listVideo.setAttribute('id', `video${namaAnak}`);
                     videoAnak(anak)
                         .then(data => {
-                            return listVideo.dataVideo = { data: data, uid: uid };
+                            listVideo.dataVideo = { data: data, uid: uid };
                         })
                     $('.video')
                         .html(listVideo);
@@ -304,6 +305,7 @@ const renderDataAnak = (user, anak, index, uid) => {
                         .then(data => {
                             settingsApp.listAplikasi = data;
                         });
+
                     $('.settings')
                         .html(settingsApp);
                     $('detail-app')
@@ -324,7 +326,6 @@ const renderDataAnak = (user, anak, index, uid) => {
         })
 
 }
-
 
 parentViewAdjust();
 auth.onAuthStateChanged((user) => {
@@ -348,41 +349,40 @@ auth.onAuthStateChanged((user) => {
                             .attr('src', '../image/social.svg');
                     }
                     try {
-                        //Get name by firestore database
-                        // dataOrangTua
-                        //     .get()
-                        //     .then((snap) => {
-                        //         $("#namaOrtu")
-                        //             .text(snap.data()["nama"]);
-                        //     });
-                        setTimeout(() => {
+                        $('.carousel')
+                            .append(`<div class="spinner-border position-absolute" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>`)
                             //GET Children by Collection 'Daftar Anak'
-                            dataOrangTua.collection('Daftar Anak')
-                                .get()
-                                .then(snap => {
-                                    !snap.empty ? snap.forEach((dataAnak, index) => {
-                                        daftarAnak.push(dataAnak.data()['email']);
-                                    }) : 0
-                                })
-                                .then(() => {
-                                    daftarAnak.length != 0 ? daftarAnak.forEach((dataAnak, index) => {
-                                            renderDataAnak(dataUser, dataAnak, index + 1, user.uid);
-                                        }) : $(".carousel.slide")
-                                        .append(`<div class="w-100 h-100 d-flex justify-content-center align-items-center"><h4>Belum ada anak yang terdaftar</h4><div>`);
-                                });
-                            //Get Children by Array daftarAnak
-                            // dataOrangTua.onSnapshot((snap) => {
-                            //     const daftarAnak = snap.data()["daftarAnak"];
-                            //     if (daftarAnak.length != 0)
-                            //         daftarAnak.forEach((dataAnak, index) => {
-                            //             renderDataAnak(dataUser, dataAnak, index + 1, user.uid);
-                            //         });
-                            //     else {
-                            //         $(".carousel.slide")
-                            //             .append(`<div class="w-100 h-100 d-flex justify-content-center align-items-center"><h4>Belum ada anak yang terdaftar</h4><div>`);
-                            //     }
-                            // });
-                        }, 1000);
+                        dataOrangTua.collection('Daftar Anak')
+                            .get()
+                            .then(snap => {
+                                !snap.empty ? snap.forEach((dataAnak, index) => {
+                                    daftarAnak.push(dataAnak.data()['email']);
+                                }) : 0
+                            })
+                            .then(() => {
+                                if (daftarAnak.length != 0) {
+                                    daftarAnak.forEach((dataAnak, index) => {
+                                        renderDataAnak(dataUser, dataAnak, index + 1, user.uid);
+                                        $('.carousel-inner')
+                                            .hide();
+                                        setTimeout(() => {
+                                            $('.carousel-inner')
+                                                .show();
+                                            $('div.spinner-border')
+                                                .remove();
+                                        }, 1000)
+                                    })
+                                } else {
+                                    $('.carousel-inner')
+                                        .remove();
+                                    $(".carousel.slide")
+                                        .append(`<div class="w-100 h-half d-flex justify-content-center align-items-center"><h4>Belum ada anak yang terdaftar</h4><div>`);
+                                    $('div.spinner-border')
+                                        .remove();
+                                }
+                            });
                     } catch {}
                 });
         } else {

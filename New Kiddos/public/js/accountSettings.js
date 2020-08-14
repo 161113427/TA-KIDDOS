@@ -1,6 +1,93 @@
 import { auth, db } from "./auth.js";
 import "../css/style.css";
 
+function changePhoto(user) {
+    $(".profileImage")
+        .html(`<div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>`)
+    const file = document.getElementById('choosePhoto')
+        .files[0];
+    if (file.type == "image/jpeg" || file.type == "image/png") {
+        const storage = firebase.storage()
+            .ref()
+            .child(`${user.email}/profilePhoto/profilePhoto.${file.name.split('.').pop()}`);
+        storage.delete();
+        storage.put(file, { contentType: file.type })
+            .then((imgURL) => {
+                return imgURL.ref.getDownloadURL()
+            })
+            .then(url => {
+                user.updateProfile({
+                    photoURL: url
+                });
+            })
+            .then(() => {
+                alert("Gambar berhasil diubah");
+                return window.location.assign('/accountSettings');
+            })
+    } else {
+        alert('File yang diminta tidak sesuai');
+        window.location.assign('/accountSettings');
+    }
+}
+
+function updateName(user) {
+    user.updateProfile({
+            displayName: $('input[name="nama-user"]')
+                .val()
+        })
+        .then(() => {
+            return db.collection('User')
+                .doc(user.email)
+                .update({
+                    nama: user.displayName
+                })
+                .catch(err => {
+                    alert(err);
+                    $("#updateName .sb")
+                        .html(`<input type="submit" class="button btn btn-primary rounded-pill" value="Simpan" name="btn-save-change-name">`);
+                });
+        })
+        .then(() => {
+            alert('Nama berhasil diganti');
+            return window.location.assign('/accountSettings');
+        })
+        .catch((error) => {
+            alert(error.message);
+            $("#updateName .sb")
+                .html(`<input type="submit" class="button btn btn-primary rounded-pill" value="Simpan" name="btn-save-change-name">`)
+        });
+}
+
+function updateSecurity(user) {
+    if ($('input[name="new-password"]')
+        .val() === $('input[name="re-new-password"]')
+        .val()) {
+        $("#updateSecurity .sb")
+            .html(`<div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>`)
+        user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, $('input[name="password"]')
+                .val()))
+            .then(result => {
+                user.updatePassword($('input[name="new-password"]')
+                        .val())
+                    .then(() => {
+                        alert('Kata sandi berhasil diganti');
+                        return window.location.assign('/accountSettings');
+                    })
+            })
+            .catch(err => {
+                alert("Kata sandi lama tidak sesuai");
+                $("#updateSecurity .sb")
+                    .html(`<input type="submit" class="button btn btn-primary rounded-pill" value="Simpan" name="btn-save-change-password">`)
+            })
+    } else {
+        alert("konfirmasi kata sandi tidak sesuai");
+    }
+}
+
 auth.onAuthStateChanged(user => {
     if (!user) {
         return window.location.assign('/login');
@@ -25,73 +112,22 @@ auth.onAuthStateChanged(user => {
                         .trigger('click');
                     $('input[type="file"]')
                         .change((e) => {
-                            const file = document.getElementById('choosePhoto')
-                                .files[0];
-                            const storage = firebase.storage()
-                                .ref()
-                                .child(`${user.email}/profilePhoto/profilePhoto.${file.name.split('.').pop()}`);
-                            storage.delete();
-                            storage.put(file, { contentType: file.type })
-                                .then((imgURL) => {
-                                    return imgURL.ref.getDownloadURL()
-                                })
-                                .then(url => {
-                                    user.updateProfile({
-                                        photoURL: url
-                                    })
-                                })
-                                .then(() => {
-                                    alert("Gambar berhasil diubah");
-                                    return window.location.assign('/accountSettings');
-                                })
-                            e.preventDefault();
+                            changePhoto(user);
+                            e.stopPropagation();
                         });
                 });
             $("#updateName")
                 .submit((e) => {
-                    user.updateProfile({
-                            displayName: $('input[name="nama-user"]')
-                                .val()
-                        })
-                        .then(() => {
-                            console.log(user.email);
-                            return db.collection('User')
-                                .doc(user.email)
-                                .update({
-                                    nama: user.displayName
-                                })
-                                .catch(err => { alert(err) });
-                        })
-                        .then(() => {
-                            alert('Nama berhasil diganti');
-                            return window.location.assign('/accountSettings');
-                        })
-                        .catch(function (error) {
-                            alert(error.message);
-                        });
+                    $("#updateName .sb")
+                        .html(`<div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>`)
+                    updateName(user);
                     e.preventDefault();
                 });
             $("#updateSecurity")
                 .submit((e) => {
-                    if ($('input[name="new-password"]')
-                        .val() === $('input[name="re-new-password"]')
-                        .val()) {
-                        user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, $('input[name="password"]')
-                                .val()))
-                            .then(result => {
-                                user.updatePassword($('input[name="new-password"]')
-                                        .val())
-                                    .then(() => {
-                                        alert('Kata sandi berhasil diganti');
-                                        return window.location.assign('/accountSettings');
-                                    })
-                            })
-                            .catch(err => {
-                                alert("Kata sandi lama tidak sesuai");
-                            })
-                    } else {
-                        alert("konfirmasi kata sandi tidak sesuai");
-                    }
+                    updateSecurity(user)
                     e.preventDefault();
                 });
 

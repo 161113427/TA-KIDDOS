@@ -122,7 +122,7 @@ class SettingsApp extends HTMLElement {
                                 <tr>
                                     <th>Aplikasi</th>
                                     <th>Durasi</th>
-                                    <th>Aktif/Non-aktif</th>
+                                    <th>Aktif</th>
                                 </tr>
                             </table>
                         </div>
@@ -139,7 +139,7 @@ class SettingsApp extends HTMLElement {
                             <table class="w-100 tabel-detail">
                                 <tr>
                                     <th>Aplikasi</th>
-                                    <th>Aktif/Non-aktif</th>
+                                    <th>Aktif</th>
                                 </tr>
                             </table>
                         </div>
@@ -152,8 +152,8 @@ class SettingsApp extends HTMLElement {
                 <ul class="w-100 px-0">
                     <li>
                         <a id="rekamAplikasi" class="p-3"><h4 class="text-left"><ion-icon name="caret-forward" class="pr-3"></ion-icon>Perekaman Layar</h4></a>
-                        <div class="w-100" id="rekamList" style="display:none">
-                            <div class="d-flex flex-wrap justify-content-end align-items-center mr-md-5 mb-3 tabel-detail1">
+                        <div class="w-100 tabel-detail1" id="rekamList" style="display:none">
+                            <div class="d-flex flex-wrap justify-content-end align-items-center mr-md-5 mb-3">
                                 <p class="mr-3"><strong>Durasi Perekaman</strong></p>
                                 <div class="mr-2"><select id="durasiPerekaman">
                                     <option value="1">1</option>
@@ -167,12 +167,166 @@ class SettingsApp extends HTMLElement {
                             <table class="w-100 tabel-detail">
                                 <tr>
                                     <th>Aplikasi</th>
-                                    <th>Aktif/Non-aktif</th>
+                                    <th>Aktif</th>
                                 </tr>
                             </table>
                         </div>
                     </li>
                 </ul>`);
+    }
+    setDurasiPembatasan(user, anak, index, namaApp, namaPaketAplikasi) {
+        if ($(`#batasi${index}-${namaApp.split(' ').join('')}`)
+            .is(':checked')) {
+            let value = 0;
+            $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')} option:selected`)
+                .each(function () {
+                    value += $(this)
+                        .val();
+                });
+            user.doc(anak)
+                .collection('Pengaturan')
+                .doc("Pembatasan")
+                .update({
+                    waktuDimutakhirkan: Date.now()
+                });
+            user.doc(anak)
+                .collection('Pengaturan')
+                .doc("Pembatasan")
+                .collection('Aktif')
+                .doc(namaApp)
+                .set({
+                    namaAplikasi: namaApp,
+                    namaPaketAplikasi: namaPaketAplikasi,
+                    durasiPembatasan: parseInt(value)
+                })
+                .then(() => {
+                    alert('Pengaturan berhasil disimpan');
+                })
+        }
+    }
+    static updateBlokir(user, anak, element, namaApp, namaPaketAplikasi, index) {
+
+        user.doc(anak)
+            .collection('Pengaturan')
+            .doc(element)
+            .set({ waktuDimutakhirkan: Date.now() })
+            .then(() => {
+                user.doc(anak)
+                    .collection('Pengaturan')
+                    .doc(element)
+                    .collection('Aktif')
+                    .doc(namaApp)
+                    .set({
+                        namaAplikasi: namaApp,
+                        namaPaketAplikasi: namaPaketAplikasi
+                    })
+                    .then(() => {
+                        user.doc(anak)
+                            .collection('Pengaturan')
+                            .doc('Pembatasan')
+                            .collection('Aktif')
+                            .doc(namaApp)
+                            .delete();
+                        user.doc(anak)
+                            .collection('Pengaturan')
+                            .doc('Perekaman')
+                            .collection('Aktif')
+                            .doc(namaApp)
+                            .delete();
+                        user.doc(anak)
+                            .collection('Pengaturan')
+                            .doc('Pembatasan')
+                            .update({ waktuDimutakhirkan: Date.now() })
+                    })
+                    .then(() => {
+                        $(`#batasi${index}-${namaApp.split(' ').join('')}`)
+                            .prop('checked', false);
+                        $(`#rekam${index}-${namaApp.split(' ').join('')}`)
+                            .prop('checked', false);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            })
+    }
+    static updatePembatasan(user, anak, element, namaApp, namaPaketAplikasi, index) {
+        let val = 0;
+        $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')} option:selected`)
+            .each(function () {
+                val += $(this)
+                    .val();
+            });
+        user.doc(anak)
+            .collection('Pengaturan')
+            .doc(element)
+            .set({ waktuDimutakhirkan: Date.now() })
+            .then(() => {
+                user.doc(anak)
+                    .collection('Pengaturan')
+                    .doc(element)
+                    .collection('Aktif')
+                    .doc(namaApp)
+                    .set({
+                        namaAplikasi: namaApp,
+                        namaPaketAplikasi: namaPaketAplikasi,
+                        durasiPembatasan: parseInt(val)
+                    })
+                    .then(() => {
+                        user.doc(anak)
+                            .collection('Pengaturan')
+                            .doc('Blokir')
+                            .collection('Aktif')
+                            .doc(namaApp)
+                            .delete();
+                        user.doc(anak)
+                            .collection('Pengaturan')
+                            .doc('Blokir')
+                            .update({ waktuDimutakhirkan: Date.now() })
+                    })
+                    .then(() => {
+                        $(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                            .prop('checked', false);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            })
+    }
+    static updatePerekaman(user, anak, element, namaApp, namaPaketAplikasi, index) {
+        user.doc(anak)
+            .collection('Pengaturan')
+            .doc(element)
+            .collection('Aktif')
+            .doc(namaApp)
+            .set({
+                namaAplikasi: namaApp,
+                namaPaketAplikasi: namaPaketAplikasi
+            })
+        user.doc(anak)
+            .collection('Pengaturan')
+            .doc('Blokir')
+            .collection('Aktif')
+            .doc(namaApp)
+            .delete()
+            .then(() => {
+                $(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                    .prop('checked', false);
+            });
+    }
+    updateDurasiPerekaman(doc, index) {
+        let value = 0;
+        $("#durasiPerekaman option:selected")
+            .each(function () {
+                value += $(this)
+                    .val();
+            });
+        doc.update({
+            durasiPerekaman: parseInt(value),
+            waktuDimutakhirkan: Date.now()
+        })
+        if (index == 0) {
+            alert('Pengaturan berhasil disimpan');
+        }
     }
     toggleStatus(namaApp, index, namaPaketAplikasi) {
         const user = this._data.user;
@@ -185,50 +339,11 @@ class SettingsApp extends HTMLElement {
             .doc("Perekaman");
         $("#durasiPerekaman")
             .change(() => {
-                let value = 0;
-                $("#durasiPerekaman option:selected")
-                    .each(function () {
-                        value += $(this)
-                            .val();
-                    });
-                doc.update({
-                    durasiPerekaman: parseInt(value),
-                    waktuDimutakhirkan: Date.now()
-                })
-                if (index == 0) {
-                    alert('Pengaturan berhasil disimpan');
-                }
+                this.updateDurasiPerekaman(doc, index);
             });
         $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')}`)
             .change(() => {
-                if ($(`#batasi${index}-${namaApp.split(' ').join('')}`)
-                    .is(':checked')) {
-                    let value = 0;
-                    $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')} option:selected`)
-                        .each(function () {
-                            value += $(this)
-                                .val();
-                        });
-                    user.doc(anak)
-                        .collection('Pengaturan')
-                        .doc("Pembatasan")
-                        .update({
-                            waktuDimutakhirkan: Date.now()
-                        });
-                    user.doc(anak)
-                        .collection('Pengaturan')
-                        .doc("Pembatasan")
-                        .collection('Aktif')
-                        .doc(namaApp)
-                        .set({
-                            namaAplikasi: namaApp,
-                            namaPaketAplikasi: namaPaketAplikasi,
-                            durasiPembatasan: parseInt(value)
-                        })
-                        .then(() => {
-                            alert('Pengaturan berhasil disimpan');
-                        })
-                }
+                this.setDurasiPembatasan(user, anak, index, namaApp, namaPaketAplikasi);
             })
         listPengaturan.forEach((element, i) => {
             user.doc(anak)
@@ -247,66 +362,52 @@ class SettingsApp extends HTMLElement {
                 });
             $(`#${listInput[i]}${index}-${namaApp.split(' ').join('')}`)
                 .change(function () {
-                    alert('Pengaturan berhasil disimpan');
                     if (this.checked) {
-                        user.doc(anak)
-                            .collection('Pengaturan')
-                            .doc(element)
-                            .update({
-                                waktuDimutakhirkan: Date.now()
-                            });
                         if (element == "Blokir") {
-                            user.doc(anak)
-                                .collection('Pengaturan')
-                                .doc(element)
-                                .collection('Aktif')
-                                .doc(namaApp)
-                                .set({
-                                    namaAplikasi: namaApp,
-                                    namaPaketAplikasi: namaPaketAplikasi
-                                })
-                                .then(() => {
-                                    $(`#batasi${index}-${namaApp.split(' ').join('')}`)
-                                        .removeAttr('checked');
-                                    user.doc(anak)
-                                        .collection('Pengaturan')
-                                        .doc('Pembatasan')
-                                        .collection('Aktif')
-                                        .doc(namaApp)
-                                        .delete();
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                })
+                            if ($(`#batasi${index}-${namaApp.split(' ').join('')}`)
+                                .is(':checked') == true || $(`#rekam${index}-${namaApp.split(' ').join('')}`)
+                                .is(':checked') == true) {
+                                const confirm = window.confirm(`Apakah anda ingin mengaktifkan Blokir dan menonaktifkan Pembatasan dan Perekaman pada Aplikasi ${namaApp}?`);
+                                if (confirm) {
+                                    SettingsApp.updateBlokir(user, anak, element, namaApp, namaPaketAplikasi, index);
+                                    alert('Pengaturan berhasil disimpan');
+                                } else $(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                                    .prop('checked', false);
+                            } else {
+                                SettingsApp.updateBlokir(user, anak, element, namaApp, namaPaketAplikasi, index);
+                                alert('Pengaturan berhasil disimpan');
+                            }
                         } else if (element == "Pembatasan") {
-                            let val = 0;
-                            $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')} option:selected`)
-                                .each(function () {
-                                    val += $(this)
-                                        .val();
-                                });
-                            user.doc(anak)
-                                .collection('Pengaturan')
-                                .doc(element)
-                                .collection('Aktif')
-                                .doc(namaApp)
-                                .set({
-                                    namaAplikasi: namaApp,
-                                    namaPaketAplikasi: namaPaketAplikasi,
-                                    durasiPembatasan: parseInt(val)
-                                })
+                            if ($(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                                .is(':checked') == true) {
+                                const confirm = window.confirm(`Aplikasi ${namaApp} telah diblokir sebelumnya. Apakah anda ingin mengaktifkan Pembatasan dan menonaktifkan Blokir pada Aplikasi ${namaApp}?`);
+                                if (confirm) {
+                                    SettingsApp.updatePembatasan(user, anak, element, namaApp, namaPaketAplikasi, index);
+                                    alert('Pengaturan berhasil disimpan');
+                                } else {
+                                    $(`#batasi${index}-${namaApp.split(' ').join('')}`)
+                                        .prop('checked', false);
+                                }
+                            } else {
+                                SettingsApp.updatePembatasan(user, anak, element, namaApp, namaPaketAplikasi, index)
+                                alert('Pengaturan berhasil disimpan');
+                            }
                         } else {
-                            user.doc(anak)
-                                .collection('Pengaturan')
-                                .doc(element)
-                                .collection('Aktif')
-                                .doc(namaApp)
-                                .set({
-                                    namaAplikasi: namaApp,
-                                    namaPaketAplikasi: namaPaketAplikasi
-                                })
+                            if ($(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                                .is(':checked') == true) {
+                                const confirm = window.confirm(`Aplikasi ${namaApp} telah diblokir sebelumnya. Apakah anda ingin mengaktifkan Perekaman dan menonaktifkan Blokir pada Aplikasi ${namaApp}?`);
+                                if (confirm) {
+                                    SettingsApp.updatePerekaman(user, anak, element, namaApp, namaPaketAplikasi, index);
+                                    alert('Pengaturan berhasil disimpan');
+                                } else {
+                                    $(`#rekam${index}-${namaApp.split(' ').join('')}`)
+                                        .prop('checked', false);
+                                }
+                            } else {
+                                SettingsApp.updatePerekaman(user, anak, element, namaApp, namaPaketAplikasi, index);
+                                alert('Pengaturan berhasil disimpan');
+                            }
                         }
-
                     } else {
                         user.doc(anak)
                             .collection('Pengaturan')
@@ -320,6 +421,7 @@ class SettingsApp extends HTMLElement {
                             .collection('Aktif')
                             .doc(namaApp)
                             .delete();
+                        alert('Pengaturan berhasil disimpan');
                     }
                 })
         });

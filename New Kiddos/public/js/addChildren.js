@@ -18,8 +18,13 @@ $(document)
                     $('#kirimVerifikasi')
                         .submit((e) => {
                             const verifCode = Math.floor((Math.random() * 899999) + 100000)
-                                .toString()
-
+                                .toString();
+                            const emailAnak = $('#email-anak')
+                                .val();
+                            $('#kirimVerifikasi')
+                                .html(`<div class="spinner-border position-absolute" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>`)
                             fetch('/addChildren', {
                                     method: "POST",
                                     headers: {
@@ -28,8 +33,7 @@ $(document)
                                     },
                                     body: JSON.stringify({
                                         kodeVerifikasi: verifCode,
-                                        emailAnak: $('#email-anak')
-                                            .val()
+                                        emailAnak: emailAnak
                                     })
                                 })
                                 .then((response) => {
@@ -45,11 +49,23 @@ $(document)
                                     if (responseJson.status == 200) {
                                         return window.location.assign('/verificationChildren');
                                     }
+                                    $('#kirimVerifikasi')
+                                        .html(`
+                                <div class="py-lg-4 px-lg-5 verif-box text-center">
+                                    <p>Masukkan alamat email anak yang ingin dipantau</p>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" id="email-anak" required="" value=""></input>
+                                        <label for="email-anak" class="col-form-label text-dark">Email</label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <input type="submit" value="Kirim" class="btn button btn-primary mt-3 px-5">
+                                        <a href="/parent"><input type="button" value="Batal" class="btn button btn-link mt-3 text-decoration-none"></a>
+                                    </div>
+                                </div>`)
                                 })
-
                             e.preventDefault();
                         })
-                } else {}
+                } else { alert('Email Anda belum terverifikasi, silakan verifikasi akun terlebih dahulu'); return window.location.assign('/verificationEmail'); }
             } else {
                 return window.location.assign('/login');
             }

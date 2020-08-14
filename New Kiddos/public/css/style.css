@@ -1,15 +1,5 @@
 @import "./bootstrap-4.4.1-dist/css/bootstrap.min.css";
 @font-face {
-    src: url('../font/Open_Sans/OpenSans-Regular.ttf');
-    font-family: 'open-sans-regular';
-}
-
-@font-face {
-    src: url('../font/Open_Sans/OpenSans-Light.ttf');
-    font-family: 'open-sans-light';
-}
-
-@font-face {
     src: url('../font/Roboto/Roboto-Light.ttf');
     font-family: 'roboto-light';
 }
@@ -20,28 +10,18 @@
 }
 
 @font-face {
-    src: url('../font/Roboto_Condensed/RobotoCondensed-Regular.ttf');
-    font-family: 'roboto-con-reg';
-}
-
-@font-face {
     src: url('../font/Roboto/Roboto-Regular.ttf');
     font-family: 'Roboto';
 }
 
 @font-face {
-    src: url('../font/Noto_Sans/NotoSans-Regular.ttf');
-    font-family: 'Noto Sans';
+    src: url('../font/Poppins/Poppins-Regular.ttf');
+    font-family: 'Poppins';
 }
 
 @font-face {
     src: url('../font/Muli/static/Muli-Light.ttf');
     font-family: 'muli-light';
-}
-
-@font-face {
-    src: url('../font/Open_Sans/OpenSans-Bold.ttf');
-    font-family: 'open-sans-bold';
 }
 
  ::-webkit-scrollbar {
@@ -63,7 +43,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Poppins';
 }
 
 h4 {
@@ -102,7 +82,6 @@ html,
 body {
     scroll-behavior: smooth;
     height: 100%;
-    font-family: 'open-sans-regular';
 }
 
 box {
@@ -228,6 +207,10 @@ button.close {
     left: -8rem !important;
 }
 
+.spinner-border {
+    color: #363bac;
+}
+
 .modal-dialog {
     position: relative;
     top: 15%;
@@ -261,7 +244,7 @@ button.close {
 
 .tabel-detail1 {
     max-height: 60vh;
-    overflow-y: overlay;
+    overflow-y: scroll;
     margin-bottom: 3rem;
 }
 
@@ -291,7 +274,7 @@ button.close {
     background-attachment: scroll;
     background-repeat: no-repeat;
     background-size: cover;
-    font-family: 'Noto Sans';
+    font-family: 'Poppins';
 }
 
 .left-list {
@@ -465,8 +448,9 @@ footer p {
 /* button */
 
 .btn-primary,
-.btn-primary:focus {
-    font-family: 'open-sans-regular';
+.btn-primary:focus,
+.btn-primary:disabled {
+    font-family: 'Roboto';
     background-color: #3548c2;
     border: none;
 }
@@ -688,7 +672,7 @@ animation: wipe-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
 
 .list-history {
     max-height: 13rem;
-    overflow-y: overlay;
+    overflow-y: scroll;
     overflow-x: hidden;
 }
 
@@ -697,12 +681,12 @@ animation: wipe-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
 }
 
 footer {
-    font-family: 'roboto-con-reg';
+    font-family: 'Roboto';
 }
 
 .bottom-box h3 {
     margin-top: 2rem;
-    font-family: 'muli-light';
+    font-family: 'Poppins';
     font-weight: 700;
 }
 
@@ -767,6 +751,9 @@ a.test-kiri {
     h2,
     h3 {
         font-size: 1.5rem;
+    }
+    .h-half {
+        min-height: 50vh;
     }
     .app-title {
         font-size: 1.2rem;

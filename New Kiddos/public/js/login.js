@@ -3,6 +3,10 @@ import "../css/style.css";
 
 $("#login")
     .submit((event) => {
+        $(".modal-footer")
+            .html(`<div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>`)
         let email = $("#user-email")
             .val()
             .toLowerCase();
@@ -19,36 +23,38 @@ $("#login")
                     }
                 case "auth/user-not-found":
                     {
-                        alert("email atau kata sandi yang anda masukkan salah");
+                        alert("email atau kata sandi yang Anda masukkan salah");
                         break;
                     }
                 case "auth/wrong-password":
                     {
-                        alert("email atau kata sandi yang anda masukkan salah");
+                        alert("email atau kata sandi yang Anda masukkan salah");
                         break;
                     }
                 }
+                $(".modal-footer")
+                    .html(`<input class="btn btn-primary w-100 rounded-pill mt-n3" type="submit" value="Masuk"></input>`)
             });
-        } else {
-            $("#email-err")
-                .removeClass("d-none");
-            $("#pass-err")
-                .removeClass("d-none");
         }
         event.preventDefault();
     });
 $("#sendPasswordReset")
     .submit((e) => {
+        $(".modal-footer")
+            .html(`<div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>`)
         auth.sendPasswordResetEmail($('#forgot-email')
                 .val())
             .then(function () {
-                alert('Permintaan telah dikirim ke email Anda, silakan cek email anda untuk menyetel ulang kata sandi');
+                alert('Permintaan telah dikirim ke email Anda, silakan cek email Anda untuk menyetel ulang kata sandi');
                 return window.location.assign('/');
             })
             .catch(function (error) {
                 // An error happened.
-                alert("Email anda belum terdaftar, silakan daftar akun baru");
-                return window.location.assign('/register')
+                alert("Email Anda belum terdaftar");
+                $(".modal-footer")
+                    .html(`<input class="btn btn-primary w-100 rounded-pill mt-n3" type="submit" value="Kirim"></input>`)
             });
         e.preventDefault();
     })

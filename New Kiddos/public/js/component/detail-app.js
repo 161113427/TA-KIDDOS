@@ -47,24 +47,67 @@ class DetailApp extends HTMLElement {
         $(`#${data.id}-content`)
             .append(detail);
     }
+    getSortedByInternet() {
+        const sortInternet = this._data.dataset.sort(function (a, b) {
+            return b.internet - a.internet;
+        })
+        sortInternet.forEach(element => {
+            const jam = element.durasi / 3600 / 1000
+            const menit = Math.round(jam * 60 % 60);
+            const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
+            $(".tabel-detail tbody")
+                .append(`<tr>
+                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                        <td>${cetakDurasi}</td>
+                        <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
+                    </tr>`);
+        });
+    }
+    getSortedByDuration() {
+        const sortDurasi = this._data.dataset.sort(function (a, b) {
+            return b.durasi - a.durasi;
+        })
+        sortDurasi.forEach(element => {
+            const jam = element.durasi / 3600 / 1000
+            const menit = Math.round(jam * 60 % 60);
+            const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
+            $(".tabel-detail tbody")
+                .append(`<tr>
+                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                        <td>${cetakDurasi}</td>
+                        <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
+                    </tr>`);
+        });
+    }
+    getSortedByName() {
+        const sortNama = this._data.dataset.sort(function (a, b) {
+            const namaA = a.namaApp.toUpperCase();
+            const namaB = b.namaApp.toUpperCase();
+            if (namaA < namaB) {
+                return -1;
+            }
+            if (namaA > namaB) {
+                return 1;
+            }
+            return 0;
+        })
+        sortNama.forEach(element => {
+            const jam = element.durasi / 3600 / 1000
+            const menit = Math.round(jam * 60 % 60);
+            const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
+            $(".tabel-detail tbody")
+                .append(`<tr>
+                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                        <td>${cetakDurasi}</td>
+                        <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
+                    </tr>`);
+        });
+    }
     renderTabel() {
         $(".tabel-detail tbody")
             .ready(() => {
                 if (this._data.msg == "berisi") {
-
-                    this._data.dataset.forEach(element => {
-                        const jam = element.durasi / 3600 / 1000
-                        const menit = Math.round(jam * 60 % 60);
-                        const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
-                        $('.total-aplikasi')
-                            .text(`${this._data.dataset.length} Aplikasi`)
-                        $(".tabel-detail tbody")
-                            .append(`<tr>
-                                    <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
-                                    <td>${cetakDurasi}</td>
-                                    <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
-                                </tr>`);
-                    });
+                    this.getSortedByName();
                     $("#sortDetail")
                         .change(() => {
                             let value = "";
@@ -81,58 +124,11 @@ class DetailApp extends HTMLElement {
                                     <th>Internet</th>
                                 </tr>`);
                             if (value == "durasiPenggunaan") {
-                                const sortDurasi = this._data.dataset.sort(function (a, b) {
-                                    return b.durasi - a.durasi;
-                                })
-                                sortDurasi.forEach(element => {
-                                    const jam = element.durasi / 3600 / 1000
-                                    const menit = Math.round(jam * 60 % 60);
-                                    const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
-                                    $(".tabel-detail tbody")
-                                        .append(`<tr>
-                                                <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
-                                                <td>${cetakDurasi}</td>
-                                                <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
-                                            </tr>`);
-                                });
+                                this.getSortedByDuration();
                             } else if (value == "penggunaanInternet") {
-                                const sortInternet = this._data.dataset.sort(function (a, b) {
-                                    return b.internet - a.internet;
-                                })
-                                sortInternet.forEach(element => {
-                                    const jam = element.durasi / 3600 / 1000
-                                    const menit = Math.round(jam * 60 % 60);
-                                    const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
-                                    $(".tabel-detail tbody")
-                                        .append(`<tr>
-                                                <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
-                                                <td>${cetakDurasi}</td>
-                                                <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
-                                            </tr>`);
-                                });
+                                this.getSortedByInternet();
                             } else if (value == "namaAplikasi") {
-                                const sortNama = this._data.dataset.sort(function (a, b) {
-                                    const namaA = a.namaApp.toUpperCase();
-                                    const namaB = b.namaApp.toUpperCase();
-                                    if (namaA < namaB) {
-                                        return -1;
-                                    }
-                                    if (namaA > namaB) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                })
-                                sortNama.forEach(element => {
-                                    const jam = element.durasi / 3600 / 1000
-                                    const menit = Math.round(jam * 60 % 60);
-                                    const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
-                                    $(".tabel-detail tbody")
-                                        .append(`<tr>
-                                                <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
-                                                <td>${cetakDurasi}</td>
-                                                <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
-                                            </tr>`);
-                                });
+                                this.getSortedByName();
                             }
                         })
                 } else {

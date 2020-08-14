@@ -7,6 +7,86 @@ class VideoApp extends HTMLElement {
     connectedCallback() {
         this.id = this.getAttribute('id') || null;
     }
+    createVideoDate(tanggalVideo, hari, Bulan, listApp, idx) {
+        $('.list-video')
+            .append(`<li class="videoDate container" id="videoHari${idx}">
+                <div class="text-left">
+                    <h4><strong>${hari[tanggalVideo.getDay()]}, ${tanggalVideo.getDate()} ${Bulan[tanggalVideo.getMonth()]} ${tanggalVideo.getFullYear()}</strong></h4>
+                    <p>${listApp.prefixes.length} Video</p>
+                </div>
+                <ul class="d-flex mt-3">
+                    
+                </ul>
+            </li>`);
+    }
+    createVideoList(listApp, idx) {
+        let namaVideo = [];
+        listApp.prefixes.forEach(vidName => {
+            const [namaVid, tanggal, jam] = vidName.name.split('_');
+            $(`#videoHari${idx} ul`)
+                .append(`<li>
+                        <div class="box px-lg-3 text-left rounded"><video id="${vidName.name.split(':').join('')}" src="#" height="180" width="300px" controls></video><p class="mt-3 d-flex justify-content-between"><strong>${namaVid[0].toUpperCase()+namaVid.substring(1)}</strong><span>Direkam pada <strong>${jam}</strong></span></p></div></li>`);
+            namaVideo.push({ nama: vidName.name, path: vidName.fullPath });
+            this.videoViewAdjust();
+        });
+        namaVideo.forEach(element => {
+            const nama = element.nama.split(':')
+                .join('');
+            $(`#${nama}`)
+                .ready(() => {
+                    this.generateVideoURL(element, nama);
+                    $(`#${nama}`)
+                        .click((e) => {
+                            this.getVideo(element, nama, e);
+                        })
+                })
+        })
+    }
+    generateVideoURL(element, nama) {
+        firebase.firestore()
+            .collection('Video Processing')
+            .doc('processedVideo')
+            .onSnapshot(snap => {
+                const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
+                if (processedURL)
+                    return $(`#${nama}`)
+                        .attr('src', processedURL);
+            });
+    }
+    requestVideoURL(element, data) {
+        fetch(`/parent/video/${this._data.uid}_${element.nama.split(':').join('')}`, { method: "POST", headers: { Accept: 'application/json', "Content-Type": "application/json" }, body: JSON.stringify(data) })
+            .then(res => {
+                return res.json();
+            })
+            .then(resJson => {
+                console.log(resJson.result);
+            })
+    }
+    getVideo(element, nama, e) {
+        if ($(`#${nama}`)
+            .attr('src') == '#') {
+            const uploadLink = element.path;
+            const key = `${this._data.uid}_${element.nama.split(':').join('')}`.toString();
+            const data = {
+                requestedID: key,
+                requestedURL: uploadLink
+            };
+            $(`#${nama}`)
+                .attr('alt', 'sedangProses');
+            this.requestVideoURL(element, data);
+            setInterval(() => {
+                if ($(`#${nama}`)
+                    .attr('alt') != "sedangProses") {
+                    return 0;
+                } else {
+                    this.generateVideoURL(element, nama);
+                    $(`#${nama}`)
+                        .attr('alt', '');
+                }
+            }, 500)
+            e.stopPropagation();
+        }
+    }
     render() {
         const db = firebase.firestore();
         const data = { id: this.id, title: "Rekaman Layar" };
@@ -18,7 +98,7 @@ class VideoApp extends HTMLElement {
         $(listVideo)
             .append(`<style>
             .videoDate {
-                overflow-x: overlay;
+                overflow-x: scroll;
                 height: 27rem;
                 margin-top: 2rem;
             }
@@ -40,7 +120,7 @@ class VideoApp extends HTMLElement {
                 .videoDate {
                     height: 50vh;
                     width: 100%;
-                    overflow-y: overlay;  
+                    overflow-y: scroll;  
                 }
                 .videoDate li{
                     margin-top:2rem;
@@ -63,83 +143,8 @@ class VideoApp extends HTMLElement {
                         const Bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
                         date.listAll()
                             .then(listApp => {
-                                $('.list-video')
-                                    .append(`
-                                            <li class="videoDate container" id="videoHari${idx}">
-                                            <div class="text-left">
-                                                <h4><strong>${hari[tanggalVideo.getDay()]}, ${tanggalVideo.getDate()} ${Bulan[tanggalVideo.getMonth()]} ${tanggalVideo.getFullYear()}</strong></h4>
-                                                <p>${listApp.prefixes.length} Video</p>
-                                            </div>
-                                            <ul class="d-flex mt-3">
-                                                
-                                            </ul>
-                                        </li>`);
-                                let namaVideo = [];
-                                listApp.prefixes.forEach(vidName => {
-                                    const [namaVid, tanggal, jam] = vidName.name.split('_');
-                                    $(`#videoHari${idx} ul`)
-                                        .append(`<li>
-                                                <div class="box px-lg-3 text-left rounded"><video id="${vidName.name.split(':').join('')}" src="#" height="180" width="300px" controls></video><p class="mt-3 d-flex justify-content-between"><strong>${namaVid[0].toUpperCase()+namaVid.substring(1)}</strong><span>Direkam pada <strong>${jam}</strong></span></p></div></li>`);
-                                    namaVideo.push({ nama: vidName.name, path: vidName.fullPath });
-                                    this.videoViewAdjust();
-                                });
-                                namaVideo.forEach(element => {
-                                    const nama = element.nama.split(':')
-                                        .join('');
-                                    $(`#${nama}`)
-                                        .ready(() => {
-                                            firebase.firestore()
-                                                .collection('Video Processing')
-                                                .doc('processedVideo')
-                                                .onSnapshot(snap => {
-                                                    const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
-                                                    if (processedURL)
-                                                        return $(`#${nama}`)
-                                                            .attr('src', processedURL);
-                                                });
-                                            $(`#${nama}`)
-                                                .click((e) => {
-                                                    if ($(`#${nama}`)
-                                                        .attr('src') == '#') {
-                                                        const uploadLink = element.path;
-                                                        const key = `${this._data.uid}_${element.nama.split(':')
-                                                        .join('')}`.toString();
-                                                        const data = {
-                                                            requestedID: key,
-                                                            requestedURL: uploadLink
-                                                        };
-                                                        $(`#${nama}`)
-                                                            .attr('src', 'sedangProses');
-                                                        fetch(`/parent/video/${this._data.uid}_${element.nama.split(':')
-                                                        .join('')}`, { method: "POST", headers: { Accept: 'application/json', "Content-Type": "application/json" }, body: JSON.stringify(data) })
-                                                            .then(res => {
-                                                                return res.json();
-                                                            })
-                                                            .then(resJson => {
-                                                                console.log(resJson.result);
-                                                            })
-                                                        setInterval(() => {
-                                                            if ($(`#${nama}`)
-                                                                .attr('src') != "sedangProses") {
-                                                                return 0;
-                                                            } else {
-                                                                firebase.firestore()
-                                                                    .collection('Video Processing')
-                                                                    .doc('processedVideo')
-                                                                    .onSnapshot(snap => {
-                                                                        const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
-                                                                        if (processedURL) {
-                                                                            return $(`#${nama}`)
-                                                                                .attr('src', processedURL);
-                                                                        }
-                                                                    })
-                                                            }
-                                                        }, 1000)
-                                                        e.stopPropagation();
-                                                    }
-                                                })
-                                        })
-                                })
+                                this.createVideoDate(tanggalVideo, hari, Bulan, listApp, idx);
+                                this.createVideoList(listApp, idx);
                             })
                     })
                 } else {

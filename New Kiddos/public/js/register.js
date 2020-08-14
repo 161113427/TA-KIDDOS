@@ -6,6 +6,10 @@ $(document)
     .ready(function () {
         $("#register")
             .submit((event) => {
+                $(".modal-footer")
+                    .html(`<div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>`)
                 if ($('input[name="agreement"]')
                     .is(":checked") && $('#user-password')
                     .val() === $('#user-re-password')
@@ -45,6 +49,15 @@ $(document)
                                         status: $("input[name='statusRadio']:checked")
                                             .val(),
                                     })
+                                    .then(() => {
+                                        db.collection('User')
+                                            .doc($('#user-email')
+                                                .val()
+                                                .toLowerCase())
+                                            .collection('Pengaturan')
+                                            .doc('Perekaman')
+                                            .set({ durasiPerekaman: 1, waktuDimutakhirkan: Date.now() });
+                                    })
                             }
                         })
                         .then(() => {
@@ -60,6 +73,8 @@ $(document)
                         })
                         .catch(function (error) {
                             alert(error.message);
+                            $(".modal-footer")
+                                .html(`<input class="btn btn-primary w-100 rounded-pill mt-n3" type="submit" value="Masuk" id="Login"></input>`)
                         });
                 } else {
                     if ($('#user-password')
@@ -68,6 +83,8 @@ $(document)
                         alert('Password tidak sesuai');
                     }
                     alert('Pendaftaran akun gagal');
+                    $(".modal-footer")
+                        .html(`<input class="btn btn-primary w-100 rounded-pill" type="submit" value="Buat Akun" id="regis"></input>`);
                 }
                 event.preventDefault();
             });

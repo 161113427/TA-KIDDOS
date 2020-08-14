@@ -44,7 +44,7 @@ class LocationApp extends HTMLElement {
                     const marker = new mapboxgl.Marker()
                         .setLngLat([this._data.lng, this._data.lat])
                         .setPopup(new mapboxgl.Popup({ offset: 25 })
-                            .setHTML(`<h5><strong>Lokasi ${this._data.namaAnak}</strong></h5><p>Alamat lokasi ${this._data.namaAnak} saat ini belum tersedia</p>`))
+                            .setHTML(`<h5><strong>Lokasi ${this._data.namaAnak}</strong></h5><p>Alamat lokasi ${this._data.namaAnak} saat ini belum terdaftar</p>`))
                         .addTo(map);
                 }
             });
@@ -103,7 +103,7 @@ class LocationApp extends HTMLElement {
                                 <div class="d-flex mb-3">
                                     <p><span><ion-icon name="location-sharp" style="color:red;"></ion-icon></span> Alamat lokasi : <strong>${result.features[0].place_name}</strong></p>
                                 </div>
-                                <div class="update-time mt-4 py-2 shadow"> Dimutakhirkan ${tanggal}/${bulan}/${tahun}, ${jam} : ${menit} </div>
+                                <div class="update-time mt-4 py-2 shadow"> Dimutakhirkan ${tanggal}/${bulan+1}/${tahun}, ${jam} : ${menit} </div>
                             </div>`, map)
                     } else {
                         $(`#${data.id}-content`)
@@ -128,9 +128,9 @@ class LocationApp extends HTMLElement {
                             <div class="position text-left mt-5">
                                 <h5 class="mb-3"><strong>${this._data.namaAnak}</strong></h5>
                                 <div class="d-flex mb-3">
-                                    <p><span><ion-icon name="location-sharp" style="color:red;"></ion-icon></span> Alamat lokasi : <strong>Alamat lokasi anak belum tersedia</strong></p>
+                                    <p><span><ion-icon name="location-sharp" style="color:red;"></ion-icon></span> Alamat lokasi : <strong>Alamat lokasi anak belum terdaftar</strong></p>
                                 </div>
-                                <div class="update-time mt-4 py-2 shadow"> Dimutakhirkan ${tanggal}/${bulan}/${tahun}, ${jam} : ${menit} </div>
+                                <div class="update-time mt-4 py-2 shadow"> Dimutakhirkan ${tanggal}/${bulan+1}/${tahun}, ${jam} : ${menit} </div>
                             </div>`, map)
                     }
                 });
