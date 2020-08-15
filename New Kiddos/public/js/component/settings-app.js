@@ -116,7 +116,7 @@ class SettingsApp extends HTMLElement {
                 <ul class="w-100 px-0">
                     <li>
                         <a id="batasiAplikasi" class="p-3"><h4 class="text-left"><ion-icon name="caret-forward" class="pr-3"></ion-icon>Pembatasan Aplikasi</h4></a>
-                        <div class="w-100 tabel-detail1" id="batasiList" style="display:none">
+                        <div class="w-100 tabel-detail1 pr-3" id="batasiList" style="display:none">
                             
                             <table class="w-100 tabel-detail">
                                 <tr>
@@ -135,7 +135,7 @@ class SettingsApp extends HTMLElement {
                 <ul class="w-100 px-0">
                     <li>
                         <a id="blokirAplikasi" class="p-3"><h4 class="text-left"><ion-icon name="caret-forward" class="pr-3"></ion-icon>Blokir Aplikasi</h4></a>
-                        <div class="justify-content-center w-100 tabel-detail1" id="blokirList" style="display:none">
+                        <div class="justify-content-center w-100 tabel-detail1 pr-3" id="blokirList" style="display:none">
                             <table class="w-100 tabel-detail">
                                 <tr>
                                     <th>Aplikasi</th>
@@ -152,17 +152,16 @@ class SettingsApp extends HTMLElement {
                 <ul class="w-100 px-0">
                     <li>
                         <a id="rekamAplikasi" class="p-3"><h4 class="text-left"><ion-icon name="caret-forward" class="pr-3"></ion-icon>Perekaman Layar</h4></a>
-                        <div class="w-100 tabel-detail1" id="rekamList" style="display:none">
+                        <div class="w-100 tabel-detail1 pr-3" id="rekamList" style="display:none">
                             <div class="d-flex flex-wrap justify-content-end align-items-center mr-md-5 mb-3">
                                 <p class="mr-3"><strong>Durasi Perekaman</strong></p>
                                 <div class="mr-2"><select id="durasiPerekaman">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
+                                    <option value="1">1 Menit</option>
+                                    <option value="2">2 Menit</option>
+                                    <option value="3">3 Menit</option>
+                                    <option value="4">4 Menit</option>
+                                    <option value="5">5 Menit</option>
                                 </select></div>
-                                <p class="mr-3"> Menit</p>
                             </div>
                             <table class="w-100 tabel-detail">
                                 <tr>
@@ -482,11 +481,10 @@ class SettingsApp extends HTMLElement {
                             .append(`<tr>
                                         <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
                                         <td><div class="mr-2"><select id="durasiPembatasan${idx}-${element.namaApp.split(' ').join('')}">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        </select>
-                                        <p class="mr-3"> Jam</p></td>
+                                        <option value="1">1 Jam</option>
+                                        <option value="2">2 Jam</option>
+                                        <option value="3">3 Jam</option>
+                                        </select></td>
                                         <td><div class="d-flex justify-content-center">
                                         <input type="checkbox" id="batasi${idx}-${element.namaApp.split(' ').join('')}">
                                       </div></td>

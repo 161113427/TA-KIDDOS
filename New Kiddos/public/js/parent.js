@@ -150,7 +150,7 @@ const renderDataAnak = (user, anak, index, uid) => {
                                 .getDownloadURL()
                                 .then(icon => {
                                     dataset.push({ namaApp: aplikasi.data()['namaAplikasi'], namaPaket: aplikasi.data()['namaPaketAplikasi'], icon: icon });
-                                    return resovle({ dataset: dataset, user: user, anak: anak, msg: "berisi" });
+                                    return resovle({ dataset: dataset, user: user, anak: anak, iconApp: iconApp, msg: "berisi" });
                                 });
                         });
                     }
