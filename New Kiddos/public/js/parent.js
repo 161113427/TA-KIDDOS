@@ -245,7 +245,7 @@ const renderDataAnak = (user, anak, index, uid) => {
                     listVideo.setAttribute('id', `video${namaAnak}`);
                     videoAnak(anak)
                         .then(data => {
-                            listVideo.dataVideo = { data: data, uid: uid };
+                            listVideo.dataVideo = { data: data, uid: uid, anak: anak };
                         })
                     $('.video')
                         .html(listVideo);
@@ -372,7 +372,7 @@ auth.onAuthStateChanged((user) => {
                                                 .show();
                                             $('div.spinner-border')
                                                 .remove();
-                                        }, 1000)
+                                        }, 2000)
                                     })
                                 } else {
                                     $('.carousel-inner')

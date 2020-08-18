@@ -57,8 +57,6 @@ app.post('/parent/video/:id', async(req, res) => {
                 destination: tempFilePath
             })
     }
-
-    fs.mkdir(path.join(os.tmpdir(), nameApp), () => {});
     let encryptedFile = [];
     for (let i = 0; i < Math.pow(2, 2); i++) {
         const tempFilePath = path.join(os.tmpdir(), 'encrypted_' + nameApp + "_" + i + '.bin');

@@ -25,12 +25,12 @@ class VideoApp extends HTMLElement {
             const [namaVid, tanggal, jam] = vidName.name.split('_');
             $(`#videoHari${idx} ul`)
                 .append(`<li>
-                        <div class="box px-lg-3 text-left rounded"><video id="${vidName.name.split(':').join('')}" src="#" height="180" width="300px" controls></video><p class="mt-3 d-flex justify-content-between"><strong>${namaVid[0].toUpperCase()+namaVid.substring(1)}</strong><span>Direkam pada <strong>${jam}</strong></span></p></div></li>`);
+                        <div class="box px-lg-3 text-left rounded"><video id="${vidName.name.split(/\W/).join('')}" src="#" height="180" width="300px" controls></video><p class="mt-3 d-flex justify-content-between"><strong>${namaVid[0].toUpperCase()+namaVid.substring(1)}</strong><span>Direkam pada <strong>${jam}</strong></span></p></div></li>`);
             namaVideo.push({ nama: vidName.name, path: vidName.fullPath });
             this.videoViewAdjust();
         });
         namaVideo.forEach(element => {
-            const nama = element.nama.split(':')
+            const nama = element.nama.split(/\W/)
                 .join('');
             $(`#${nama}`)
                 .ready(() => {
@@ -47,26 +47,34 @@ class VideoApp extends HTMLElement {
             .collection('Video Processing')
             .doc('processedVideo')
             .onSnapshot(snap => {
-                const processedURL = snap.data()[`${this._data.uid}_${element.nama.split(':').join('')}`];
+                const processedURL = snap.data()[`${this._data.uid}_${this._data.anak.split('.').join('')}_${element.nama.split(':').join('')}`];
                 if (processedURL)
                     return $(`#${nama}`)
                         .attr('src', processedURL);
             });
     }
     requestVideoURL(element, data) {
-        fetch(`/parent/video/${this._data.uid}_${element.nama.split(':').join('')}`, { method: "POST", headers: { Accept: 'application/json', "Content-Type": "application/json" }, body: JSON.stringify(data) })
+        fetch(`/parent/video/${this._data.uid}_${this._data.anak.split('.').join('')}_${element.nama.split(':').join('')}`, { method: "POST", headers: { Accept: 'application/json', "Content-Type": "application/json" }, body: JSON.stringify(data) })
             .then(res => {
                 return res.json();
             })
             .then(resJson => {
                 console.log(resJson.result);
+                $(`#${element.nama.split(/\W/)
+                    .join('')}`)
+                    .removeAttr('alt');
+            })
+            .catch((err) => {
+                $(`#${element.nama.split(/\W/)
+                    .join('')}`)
+                    .removeAttr('alt');
             })
     }
     getVideo(element, nama, e) {
         if ($(`#${nama}`)
             .attr('src') == '#') {
             const uploadLink = element.path;
-            const key = `${this._data.uid}_${element.nama.split(':').join('')}`.toString();
+            const key = `${this._data.uid}_${this._data.anak.split('.').join('')}_${element.nama.split(':').join('')}`.toString();
             const data = {
                 requestedID: key,
                 requestedURL: uploadLink
