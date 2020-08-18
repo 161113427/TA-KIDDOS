@@ -57,7 +57,7 @@ const createTopBox = (index) => {
     <div class="list-feature d-flex row justify-content-center text-center">
         <div class="col-3 fitur py-2" id="detail${index}">
             <span class="card-link d-block">
-                <div><ion-icon name="list-circle" class="fitur" id="list-app"></ion-icon></div>
+                <div><ion-icon name="list-circle" id="list-app"></ion-icon></div>
                 <div class="w-100 text-center feature-label">Detail Aplikasi</div>
             </span>
         </div>
@@ -69,7 +69,7 @@ const createTopBox = (index) => {
         </div>
         <div class="col-3 fitur py-2" id="location${index}">
             <span class="card-link">
-                <div><ion-icon name="location" class="fitur"></ion-icon></div>
+                <div><ion-icon name="location"></ion-icon></div>
                 <div class="w-100 text-center feature-label">Lokasi</div>
             </span>
         </div>

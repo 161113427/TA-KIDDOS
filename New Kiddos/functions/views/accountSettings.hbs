@@ -10,6 +10,10 @@
     <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-storage.js"></script>
     <style>
+body {
+            background: url('./image/bg-1.png') no-repeat;
+            background-size:cover;
+        }
         table tr, table tr:nth-child(odd), table tr :nth-child(even){
             border: none;
             background: none !important;
@@ -38,7 +42,7 @@
         }
     </style>
 </head>
-<body background="./image/bg-1.png">
+<body>
     <header class="nav">
         <nav class="navbar navbar-dark navbar-expand fixed-top bg-purple w-100">
             <div class="container-sm">
@@ -52,7 +56,7 @@
                         <div class="dropdown-menu border-0 rounded" aria-labelledby="dropdownMenuProfile">
                                 <a class="dropdown-item mt-3 nama" href="/parent"></a><hr>
                             <a class="dropdown-item" href="/addChildren"><img src="./image/icon/_ionicons_svg_md-person-add.svg" class="justify-content-end icon-small mr-2">Tambahkan Anak</a>
-                            <a class="dropdown-item" href="/accountSettings"><img src="./image/icon/_ionicons_svg_md-settings.svg" class="justify-content-end icon-small mr-2">Pengaturan Profil</a>
+                            <a class="dropdown-item active-page" href="/accountSettings"><img src="./image/icon/_ionicons_svg_md-settings.svg" class="justify-content-end icon-small mr-2">Pengaturan Profil</a>
                             <a class="dropdown-item signout"><img src="./image/icon/_ionicons_svg_md-log-out.svg" class="justify-content-end icon-small mr-2">Keluar</a>
                         </div>
                     </div>

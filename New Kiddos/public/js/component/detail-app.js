@@ -57,7 +57,7 @@ class DetailApp extends HTMLElement {
             const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
             $(".tabel-detail tbody")
                 .append(`<tr>
-                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.length>12 && $(window).width()<1024?element.namaApp.substring(0,12) + '...':element.namaApp.substring(0,30)}</td>
                         <td>${cetakDurasi}</td>
                         <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
                     </tr>`);
@@ -73,7 +73,7 @@ class DetailApp extends HTMLElement {
             const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
             $(".tabel-detail tbody")
                 .append(`<tr>
-                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.length>12 && $(window).width()<1024?element.namaApp.substring(0,12) + '...':element.namaApp.substring(0,30)}</td>
                         <td>${cetakDurasi}</td>
                         <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
                     </tr>`);
@@ -97,7 +97,7 @@ class DetailApp extends HTMLElement {
             const cetakDurasi = Math.floor(jam) == 0 ? menit + ' Menit' : Math.floor(jam) + " Jam " + menit + " Menit";
             $(".tabel-detail tbody")
                 .append(`<tr>
-                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.length>12 && $(window).width()<1024?element.namaApp.substring(0,12) + '...':element.namaApp.substring(0,30)}</td>
                         <td>${cetakDurasi}</td>
                         <td>${(element.internet/(1000*1000)).toFixed(2)} MB</td>
                     </tr>`);
@@ -108,6 +108,8 @@ class DetailApp extends HTMLElement {
             .ready(() => {
                 if (this._data.msg == "berisi") {
                     this.getSortedByName();
+                    $('.total-aplikasi')
+                        .text(`${this._data.dataset.length} Aplikasi`)
                     $("#sortDetail")
                         .change(() => {
                             let value = "";
@@ -115,11 +117,10 @@ class DetailApp extends HTMLElement {
                                 .each(function () {
                                     value += $(this)
                                         .val();
-                                })
-                            console.log(value);
+                                });
                             $(".tabel-detail tbody")
                                 .html(`<tr>
-                                    <th width="10rem">Aplikasi</th>
+                                    <th>Aplikasi</th>
                                     <th>Durasi</th>
                                     <th>Internet</th>
                                 </tr>`);

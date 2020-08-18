@@ -174,10 +174,10 @@ class SettingsApp extends HTMLElement {
                 </ul>`);
     }
     setDurasiPembatasan(user, anak, index, namaApp, namaPaketAplikasi) {
-        if ($(`#batasi${index}-${namaApp.split(' ').join('')}`)
+        if ($(`#batasi${index}-${namaApp.split(' ').join('').split("'").join('')}`)
             .is(':checked')) {
             let value = 0;
-            $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')} option:selected`)
+            $(`#durasiPembatasan${index}-${namaApp.split(' ').join('').split("'").join('')} option:selected`)
                 .each(function () {
                     value += $(this)
                         .val();
@@ -238,9 +238,9 @@ class SettingsApp extends HTMLElement {
                             .update({ waktuDimutakhirkan: Date.now() })
                     })
                     .then(() => {
-                        $(`#batasi${index}-${namaApp.split(' ').join('')}`)
+                        $(`#batasi${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                             .prop('checked', false);
-                        $(`#rekam${index}-${namaApp.split(' ').join('')}`)
+                        $(`#rekam${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                             .prop('checked', false);
                     })
                     .catch(err => {
@@ -250,7 +250,7 @@ class SettingsApp extends HTMLElement {
     }
     static updatePembatasan(user, anak, element, namaApp, namaPaketAplikasi, index) {
         let val = 0;
-        $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')} option:selected`)
+        $(`#durasiPembatasan${index}-${namaApp.split(' ').join('').split("'").join('')} option:selected`)
             .each(function () {
                 val += $(this)
                     .val();
@@ -283,7 +283,7 @@ class SettingsApp extends HTMLElement {
                             .update({ waktuDimutakhirkan: Date.now() })
                     })
                     .then(() => {
-                        $(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                        $(`#blokir${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                             .prop('checked', false);
                     })
                     .catch(err => {
@@ -308,7 +308,7 @@ class SettingsApp extends HTMLElement {
             .doc(namaApp)
             .delete()
             .then(() => {
-                $(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                $(`#blokir${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                     .prop('checked', false);
             });
     }
@@ -340,7 +340,7 @@ class SettingsApp extends HTMLElement {
             .change(() => {
                 this.updateDurasiPerekaman(doc, index);
             });
-        $(`#durasiPembatasan${index}-${namaApp.split(' ').join('')}`)
+        $(`#durasiPembatasan${index}-${namaApp.split(' ').join('').split("'").join('')}`)
             .change(() => {
                 this.setDurasiPembatasan(user, anak, index, namaApp, namaPaketAplikasi);
             })
@@ -352,39 +352,39 @@ class SettingsApp extends HTMLElement {
                 .get()
                 .then(snap => {
                     snap.forEach(data => {
-                        $(`#${listInput[i]}${index}${data.data()['namaAplikasi'].split(' ').join('')}`)
+                        $(`#${listInput[i]}${index}${data.data()['namaAplikasi'].split(' ').join('').split("'").join('')}`)
                             .ready(() => {
-                                $(`#${listInput[i]}${index}-${data.data()['namaAplikasi'].split(' ').join('')}`)
+                                $(`#${listInput[i]}${index}-${data.data()['namaAplikasi'].split(' ').join('').split("'").join('')}`)
                                     .attr('checked', 'check');
                             })
                     })
                 });
-            $(`#${listInput[i]}${index}-${namaApp.split(' ').join('')}`)
+            $(`#${listInput[i]}${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                 .change(function () {
                     if (this.checked) {
                         if (element == "Blokir") {
-                            if ($(`#batasi${index}-${namaApp.split(' ').join('')}`)
-                                .is(':checked') == true || $(`#rekam${index}-${namaApp.split(' ').join('')}`)
+                            if ($(`#batasi${index}-${namaApp.split(' ').join('').split("'").join('')}`)
+                                .is(':checked') == true || $(`#rekam${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                                 .is(':checked') == true) {
                                 const confirm = window.confirm(`Apakah anda ingin mengaktifkan Blokir dan menonaktifkan Pembatasan dan Perekaman pada Aplikasi ${namaApp}?`);
                                 if (confirm) {
                                     SettingsApp.updateBlokir(user, anak, element, namaApp, namaPaketAplikasi, index);
                                     alert('Pengaturan berhasil disimpan');
-                                } else $(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                                } else $(`#blokir${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                                     .prop('checked', false);
                             } else {
                                 SettingsApp.updateBlokir(user, anak, element, namaApp, namaPaketAplikasi, index);
                                 alert('Pengaturan berhasil disimpan');
                             }
                         } else if (element == "Pembatasan") {
-                            if ($(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                            if ($(`#blokir${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                                 .is(':checked') == true) {
                                 const confirm = window.confirm(`Aplikasi ${namaApp} telah diblokir sebelumnya. Apakah anda ingin mengaktifkan Pembatasan dan menonaktifkan Blokir pada Aplikasi ${namaApp}?`);
                                 if (confirm) {
                                     SettingsApp.updatePembatasan(user, anak, element, namaApp, namaPaketAplikasi, index);
                                     alert('Pengaturan berhasil disimpan');
                                 } else {
-                                    $(`#batasi${index}-${namaApp.split(' ').join('')}`)
+                                    $(`#batasi${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                                         .prop('checked', false);
                                 }
                             } else {
@@ -392,14 +392,14 @@ class SettingsApp extends HTMLElement {
                                 alert('Pengaturan berhasil disimpan');
                             }
                         } else {
-                            if ($(`#blokir${index}-${namaApp.split(' ').join('')}`)
+                            if ($(`#blokir${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                                 .is(':checked') == true) {
                                 const confirm = window.confirm(`Aplikasi ${namaApp} telah diblokir sebelumnya. Apakah anda ingin mengaktifkan Perekaman dan menonaktifkan Blokir pada Aplikasi ${namaApp}?`);
                                 if (confirm) {
                                     SettingsApp.updatePerekaman(user, anak, element, namaApp, namaPaketAplikasi, index);
                                     alert('Pengaturan berhasil disimpan');
                                 } else {
-                                    $(`#rekam${index}-${namaApp.split(' ').join('')}`)
+                                    $(`#rekam${index}-${namaApp.split(' ').join('').split("'").join('')}`)
                                         .prop('checked', false);
                                 }
                             } else {
@@ -456,9 +456,9 @@ class SettingsApp extends HTMLElement {
                     sortNama.forEach((element, idx) => {
                         $("#blokirList .tabel-detail tbody")
                             .append(`<tr>
-                                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.length>12 && $(window).width()<1024?element.namaApp.substring(0,12) + '...':element.namaApp.substring(0,30)}</td>
                                         <td><div class="d-flex justify-content-center">
-                                        <input type="checkbox" id="blokir${idx}-${element.namaApp.split(' ').join('')}">
+                                        <input type="checkbox" id="blokir${idx}-${element.namaApp.split(' ').join('').split("'").join('')}">
                                       </div></td>
                                     </tr>`);
                         this._data.user.doc(this._data.anak)
@@ -468,7 +468,7 @@ class SettingsApp extends HTMLElement {
                             .get()
                             .then((snap) => {
                                 snap.forEach(e => {
-                                    $(`#durasiPembatasan${idx}-${element.namaApp.split(' ').join('')} option`)
+                                    $(`#durasiPembatasan${idx}-${element.namaApp.split(' ').join('').split("'").join('')} option`)
                                         .each(function () {
                                             if ($(this)
                                                 .val() == e.data()['durasiPembatasan'] && e.data()['namaAplikasi'] == element.namaApp)
@@ -479,21 +479,21 @@ class SettingsApp extends HTMLElement {
                             })
                         $("#batasiList .tabel-detail tbody")
                             .append(`<tr>
-                                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
-                                        <td><div class="mr-2"><select id="durasiPembatasan${idx}-${element.namaApp.split(' ').join('')}">
+                                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.length>12 && $(window).width()<1024?element.namaApp.substring(0,12) + '...':element.namaApp.substring(0,30)}</td>
+                                        <td><div class="mr-2"><select id="durasiPembatasan${idx}-${element.namaApp.split(' ').join('').split("'").join('')}">
                                         <option value="1">1 Jam</option>
                                         <option value="2">2 Jam</option>
                                         <option value="3">3 Jam</option>
                                         </select></td>
                                         <td><div class="d-flex justify-content-center">
-                                        <input type="checkbox" id="batasi${idx}-${element.namaApp.split(' ').join('')}">
+                                        <input type="checkbox" id="batasi${idx}-${element.namaApp.split(' ').join('').split("'").join('')}">
                                       </div></td>
                                     </tr>`);
                         $("#rekamList .tabel-detail tbody")
                             .append(`<tr>
-                                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.substring(0,15)}</td>
+                                        <td><img src="${element.icon}" class="justify-content-end icon-small mr-1">${element.namaApp.length>12 && $(window).width()<1024?element.namaApp.substring(0,12) + '...':element.namaApp.substring(0,30)}</td>
                                         <td><div class="d-flex justify-content-center">
-                                        <input type="checkbox" id="rekam${idx}-${element.namaApp.split(' ').join('')}">
+                                        <input type="checkbox" id="rekam${idx}-${element.namaApp.split(' ').join('').split("'").join('')}">
                                         </div></td>
                                     </tr>`);
                     })
