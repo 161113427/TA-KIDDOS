@@ -131,7 +131,7 @@ class VideoApp extends HTMLElement {
                 position:absolute;
                 color:white;
             }
-            .video-info .ion-icon{
+            .video-info ion-icon{
                 width:3rem;
                 height:3rem;
             }
