@@ -15,8 +15,8 @@
 }
 
 @font-face {
-    src: url('../font/Poppins/Poppins-Regular.ttf');
-    font-family: 'Poppins';
+    src: url('../font/Google-sans-Font-Family/ProductSans-Regular.ttf');
+    font-family: 'Google-Sans';
 }
 
 @font-face {
@@ -43,7 +43,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Poppins';
+    font-family: 'Google-Sans';
 }
 
 h4 {
@@ -280,7 +280,7 @@ button.close {
     background-attachment: scroll;
     background-repeat: no-repeat;
     background-size: cover;
-    font-family: 'Poppins';
+    font-family: 'Google-Sans';
 }
 
 .left-list {
@@ -699,7 +699,7 @@ footer {
 
 .bottom-box h3 {
     margin-top: 2rem;
-    font-family: 'Poppins';
+    font-family: 'Google-Sans';
     font-weight: 700;
 }
 

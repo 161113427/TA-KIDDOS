@@ -25,7 +25,7 @@ class VideoApp extends HTMLElement {
             const [namaVid, tanggal, jam] = vidName.name.split('_');
             $(`#videoHari${idx} ul`)
                 .append(`<li>
-                        <div class="box px-lg-3 text-left rounded"><video id="${vidName.name.split(/\W/).join('')}" src="#" height="180" width="300px" controls></video><p class="mt-3 d-flex justify-content-between"><strong>${namaVid[0].toUpperCase()+namaVid.substring(1)}</strong><span>Direkam pada <strong>${jam}</strong></span></p></div></li>`);
+                        <div class="box px-lg-3 text-left rounded"><a class="d-flex justify-content-center align-items-center" id="${vidName.name.split(/\W/).join('')}" ><video height="180" width="300px"></video><span class="video-info"><ion-icon name="play-circle-outline" size="large"></ion-icon></span></a><p class="mt-3 d-flex justify-content-between"><strong>${namaVid[0].toUpperCase()+namaVid.substring(1)}</strong><span>Direkam pada <strong>${jam}</strong></span></p></div></li>`);
             namaVideo.push({ nama: vidName.name, path: vidName.fullPath });
             this.videoViewAdjust();
         });
@@ -37,6 +37,10 @@ class VideoApp extends HTMLElement {
                     this.generateVideoURL(element, nama);
                     $(`#${nama}`)
                         .click((e) => {
+                            $(`#${nama} .video-info`)
+                                .html(`<div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>`)
                             this.getVideo(element, nama, e);
                         })
                 })
@@ -48,9 +52,14 @@ class VideoApp extends HTMLElement {
             .doc('processedVideo')
             .onSnapshot(snap => {
                 const processedURL = snap.data()[`${this._data.uid}_${this._data.anak.split('.').join('')}_${element.nama.split(':').join('')}`];
-                if (processedURL)
-                    return $(`#${nama}`)
+                if (processedURL) {
+                    $(`#${nama} .video-info`)
+                        .remove();
+                    $(`#${nama} video`)
+                        .attr('controls', true);
+                    return $(`#${nama} video`)
                         .attr('src', processedURL);
+                }
             });
     }
     requestVideoURL(element, data) {
@@ -62,17 +71,18 @@ class VideoApp extends HTMLElement {
                 console.log(resJson.result);
                 $(`#${element.nama.split(/\W/)
                     .join('')}`)
-                    .removeAttr('alt');
+                    .removeClass('processing');
             })
             .catch((err) => {
                 $(`#${element.nama.split(/\W/)
                     .join('')}`)
-                    .removeAttr('alt');
+                    .removeClass('processing');
+                alert('Gagal memuat video');
             })
     }
     getVideo(element, nama, e) {
-        if ($(`#${nama}`)
-            .attr('src') == '#') {
+        if ($(`#${nama} video`)
+            .attr('src') == undefined) {
             const uploadLink = element.path;
             const key = `${this._data.uid}_${this._data.anak.split('.').join('')}_${element.nama.split(':').join('')}`.toString();
             const data = {
@@ -80,16 +90,25 @@ class VideoApp extends HTMLElement {
                 requestedURL: uploadLink
             };
             $(`#${nama}`)
-                .attr('alt', 'sedangProses');
+                .addClass('processing');
             this.requestVideoURL(element, data);
-            setInterval(() => {
-                if ($(`#${nama}`)
-                    .attr('alt') != "sedangProses") {
+            const check = setInterval(() => {
+                if (!$(`#${nama}`)
+                    .attr('class')
+                    .toString()
+                    .includes("processing")) {
+                    console.log('1');
+                    clearInterval(check);
                     return 0;
                 } else {
                     this.generateVideoURL(element, nama);
-                    $(`#${nama}`)
-                        .attr('alt', '');
+                    if ($(`#${nama} video`)
+                        .attr('src') != undefined) {
+                        $(`#${nama} .video-info`)
+                            .remove();
+                        $(`#${nama}`)
+                            .removeClass('processing');
+                    }
                 }
             }, 500)
             e.stopPropagation();
@@ -105,6 +124,16 @@ class VideoApp extends HTMLElement {
         const listVideo = document.createElement("div");
         $(listVideo)
             .append(`<style>
+            video{
+                background:rgba(0,0,0,0.85);
+            }
+            .video-info{
+                position:absolute;
+                color:white;
+            }
+            .video-info .spinner-border{
+                color:white;
+            }
             .videoDate {
                 overflow-x: scroll;
                 height: 27rem;
