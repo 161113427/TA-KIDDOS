@@ -131,6 +131,10 @@ class VideoApp extends HTMLElement {
                 position:absolute;
                 color:white;
             }
+            .video-info .ion-icon{
+                width:3rem;
+                height:3rem;
+            }
             .video-info .spinner-border{
                 color:white;
             }
