@@ -92,18 +92,25 @@ const riwayatAplikasi = (user, anak, index) => {
         .limit(30)
         .onSnapshot((snap) => {
             try {
-                snap.forEach((riwayatAkses) => {
-                    const waktuAkses = new Date(riwayatAkses.data()["waktuAkses"]);
-                    $(`#history-${index}`)
-                        .append(`<div class="col-6">
-                                    <p>${riwayatAkses.data()["namaAplikasi"]}</p>
-                                </div>
-                                <div class="col-6 d-flex">
-                                    <ion-icon name="time" class="mr-2 pt-1"></ion-icon>
-                                    <p>${waktuAkses.getHours()} : ${tambahDigit(waktuAkses.getMinutes())} </p>
-                                </div>
-                            `);
-                });
+                user.doc(anak)
+                    .get()
+                    .then((data) => {
+                        const updateTime = new Date(data.data()['timestampPemutakhiranData']);
+                        snap.forEach((riwayatAkses) => {
+                            const waktuAkses = new Date(riwayatAkses.data()["waktuAkses"]);
+                            if (updateTime.getDate() == waktuAkses.getDate() && updateTime.getMonth() == waktuAkses.getMonth() && updateTime.getFullYear() == waktuAkses.getFullYear()) {
+                                $(`#history-${index}`)
+                                    .append(`<div class="col-6">
+                                            <p>${riwayatAkses.data()["namaAplikasi"]}</p>
+                                        </div>
+                                        <div class="col-6 d-flex">
+                                            <ion-icon name="time" class="mr-2 pt-1"></ion-icon>
+                                            <p>${waktuAkses.getHours()} : ${tambahDigit(waktuAkses.getMinutes())} </p>
+                                        </div>
+                                    `);
+                            }
+                        });
+                    })
             } catch {}
         })
 

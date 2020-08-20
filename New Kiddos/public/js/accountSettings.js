@@ -132,11 +132,12 @@ auth.onAuthStateChanged(user => {
                 });
 
             $('input[name="btn-cancel-change-name"]')
-                .click(() => {
-                    $('input[name="nama-user"]')
-                        .attr('disabled', true);
+                .click((e) => {
+                    e.preventDefault();
                     $('input[name="nama-user"]')
                         .val(user.displayName);
+                    $('input[name="nama-user"]')
+                        .attr('disabled', true);
                     $('input[name="btn-save-change-name"]')
                         .attr('disabled', true);
                     $('input[name="btn-cancel-change-name"]')

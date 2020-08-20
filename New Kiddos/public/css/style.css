@@ -572,11 +572,16 @@ animation: wipe-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
 .img-profile {
     position: relative;
     top: -7rem;
-    margin-bottom: -3rem;
+    margin: 0 auto;
+    margin-bottom: -5rem;
     border: 6px solid #f8f9fa;
     border-radius: 50%;
     width: 8rem;
     height: 8rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 .image-profile {
@@ -834,11 +839,10 @@ a.test-kiri {
         margin-left: 0rem;
     }
     .tabel-detail td {
-        text-align: left;
-        padding-left: 3rem;
+        text-align: center;
     }
     .tabel-detail td:last-child {
-        text-align: left;
+        text-align: center;
         padding-left: 0;
     }
 }
@@ -870,8 +874,7 @@ a.test-kiri {
         font-size: 0.9rem;
     }
     .tabel-detail td {
-        text-align: left;
-        padding-left: 1rem;
+        text-align: center;
     }
     .tabel-detail td:first-child {
         max-width: 40% !important;
@@ -1005,8 +1008,7 @@ a.test-kiri {
         font-size: 0.85rem;
     }
     .tabel-detail td {
-        text-align: left;
-        padding-left: 1rem;
+        text-align: center;
     }
     .tabel-detail td:first-child {
         max-width: 40% !important;
@@ -1060,8 +1062,7 @@ a.test-kiri {
         box-sizing: border-box;
     }
     .tabel-detail td {
-        text-align: left;
-        padding-left: 2rem;
+        text-align: center;
     }
     .tabel-detail td:first-child {
         text-align: left;
