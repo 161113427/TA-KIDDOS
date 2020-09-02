@@ -15,8 +15,8 @@ class SettingsApp extends HTMLElement {
         box.value = data;
         $(this)
             .append(box);
-        const detail = document.createElement("div");
-        $(detail)
+        const menu = document.createElement("div");
+        $(menu)
             .append(`<style>
         input[type="number"]{
             border:1px solid #c3c3c3;
@@ -74,7 +74,7 @@ class SettingsApp extends HTMLElement {
         </style>
         <div class="d-block w-100 pt-4 list-settings"></div>`);
         $(`#${data.id}-content`)
-            .append(detail);
+            .append(menu);
 
         this.pengaturanPembatasanAplikasi();
         this.pengaturanRekamLayar();

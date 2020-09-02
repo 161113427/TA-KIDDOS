@@ -38,6 +38,7 @@ $("#login")
         }
         event.preventDefault();
     });
+
 $("#sendPasswordReset")
     .submit((e) => {
         $(".modal-footer")
@@ -57,7 +58,8 @@ $("#sendPasswordReset")
                     .html(`<input class="btn btn-primary w-100 rounded-pill mt-n3" type="submit" value="Kirim"></input>`)
             });
         e.preventDefault();
-    })
+    });
+
 $(document)
     .ready(() => {
         if ($(window)
@@ -80,6 +82,7 @@ $(document)
                 }
             })
     })
+    
 $("#user-email")
     .focus(() => {
         $("#email-err")

@@ -58,7 +58,7 @@ const createTopBox = (index) => {
         <div class="col-3 fitur py-2" id="detail${index}">
             <span class="card-link d-block">
                 <div><ion-icon name="list-circle" id="list-app"></ion-icon></div>
-                <div class="w-100 text-center feature-label">Detail Aplikasi</div>
+                <div class="w-100 text-center feature-label">Aplikasi</div>
             </span>
         </div>
         <div class="col-3 fitur py-2" id="video${index}">
@@ -141,6 +141,17 @@ const renderDataAnak = (user, anak, index, uid) => {
                 } catch {}
             })
     });
+    const daftarUninstall = new Promise((resolve, reject) => {
+        return user.doc(anak)
+            .collection("Aplikasi Dihapus").orderBy('waktuHapus','desc')
+            .onSnapshot((snap) => {
+                let daftarUninstall = [];
+                snap.forEach((data) => {
+                    daftarUninstall.push({ namaApp: data.data()['namaAplikasi'], waktuHapus: data.data()['waktuHapus'] || 1598000000000 });
+                })
+                return resolve(daftarUninstall);
+            })
+    })
     const daftarAplikasi = new Promise((resovle, reject) => {
         return user.doc(anak)
             .collection("Daftar Aplikasi")
@@ -193,7 +204,7 @@ const renderDataAnak = (user, anak, index, uid) => {
                     $(`#lastUpdate${index}`)
                     .text(`Belum ada data untuk ditampilkan`) :
                     $(`#lastUpdate${index}`)
-                    .text(`${tglUpdate}/${blnUpdate+1}/${thnUpdate}, Pukul ${jamUpdate}:${menitUpdate}`);
+                    .text(`${tglUpdate}/${blnUpdate+1}/${thnUpdate}, Pukul ${jamUpdate}:${tambahDigit(menitUpdate)}`);
             } catch {}
             try {
                 $(`#appPalingLamaDiakses${index}`)
@@ -227,7 +238,10 @@ const renderDataAnak = (user, anak, index, uid) => {
                     detailPenggunaanAplikasi
                         .then(data => {
                             detailApp.detailAplikasi = data;
-                        })
+                        });
+                    daftarUninstall.then((data) => {
+                        detailApp.uninstalledAplikasi = data;
+                    })
 
                     $('.detailPenggunaan')
                         .html(detailApp);
